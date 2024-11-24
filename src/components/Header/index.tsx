@@ -68,9 +68,6 @@ const Header = (props: {
 
         <div className="hidden xl:block">
           <div>
-            <h1 className="mb-0.5 text-heading-5 font-bold text-dark dark:text-white">
-              Dashboard
-            </h1>
             <p className="font-medium">Next.js Admin Dashboard Solution</p>
           </div>
         </div>
@@ -84,10 +81,6 @@ const Header = (props: {
             {/* <!-- Dark Mode Toggle --> */}
             <DarkModeSwitcher />
             {/* <!-- Dark Mode Toggle --> */}
-
-            {/* <!-- Notification Menu Area --> */}
-            <DropdownNotification />
-            {/* <!-- Notification Menu Area --> */}
           </ul>
 
           {/* <!-- User Area --> */}
