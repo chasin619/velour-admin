@@ -68,7 +68,7 @@ const Header = (props: {
 
         <div className="hidden xl:block">
           <div>
-            <p className="font-medium">Next.js Admin Dashboard Solution</p>
+            <p className="font-medium">Chic Flowers Admin Portal</p>
           </div>
         </div>
 
