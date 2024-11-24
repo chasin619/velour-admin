@@ -1,5 +1,4 @@
 import { Metadata } from "next";
-import DefaultLayout from "@/components/Layouts/DefaultLayout";
 import React from "react";
 import { Blog } from "@/components/Blog";
 
@@ -12,9 +11,7 @@ export const metadata: Metadata = {
 export default function Home() {
   return (
     <>
-      <DefaultLayout>
-        <Blog />
-      </DefaultLayout>
+      <Blog />
     </>
   );
 }
