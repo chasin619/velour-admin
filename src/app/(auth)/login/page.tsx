@@ -3,8 +3,8 @@ import Link from "next/link";
 import Image from "next/image";
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 import { Metadata } from "next";
-import DefaultLayout from "@/components/Layouts/DefaultLaout";
 import Signin from "@/components/Auth/Signin";
+import AuthLayout from "@/components/Layouts/AuthLayout";
 
 export const metadata: Metadata = {
   title: "Next.js Login Page | NextAdmin - Next.js Dashboard Kit",
@@ -13,9 +13,7 @@ export const metadata: Metadata = {
 
 const SignIn: React.FC = () => {
   return (
-    <DefaultLayout>
-      <Breadcrumb pageName="Sign In" />
-
+    <AuthLayout>
       <div className="rounded-[10px] bg-white shadow-1 dark:bg-gray-dark dark:shadow-card">
         <div className="flex flex-wrap items-center">
           <div className="w-full xl:w-1/2">
@@ -68,7 +66,7 @@ const SignIn: React.FC = () => {
           </div>
         </div>
       </div>
-    </DefaultLayout>
+    </AuthLayout>
   );
 };
 
