@@ -1,8 +1,70 @@
 "use client";
 
 import React from "react";
+import { useForm, Controller } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as Yup from "yup";
+import Tiptap from "../Tiptap";
+
+// Define form validation schema using Yup
+const validationSchema = Yup.object().shape({
+  blogTitle: Yup.string().required("Blog title is required"),
+  description: Yup.string()
+    .required("Description is required")
+    .test("is-not-empty", "Description is required", (value) => {
+      const textContent = value
+        ? value.replace(/<\/?[^>]+(>|$)/g, "").trim()
+        : "";
+      return textContent.length > 0;
+    }),
+  profilePhoto: Yup.mixed()
+    .required("Profile photo is required")
+    .test(
+      "fileSize",
+      "File size must be less than 1MB",
+      (value) => !value || (value && value[0]?.size <= 1024 * 1024), // 1MB limit
+    )
+    .test(
+      "fileType",
+      "Only PNG, JPG, or JPEG images are allowed",
+      (value) =>
+        !value ||
+        (value &&
+          ["image/png", "image/jpg", "image/jpeg"].includes(value[0]?.type)),
+    ),
+});
+
+interface BlogFormData {
+  blogTitle: string;
+  description: string;
+  profilePhoto: string;
+}
 
 const BlogForm = () => {
+  const {
+    register,
+    handleSubmit,
+    control,
+    formState: { errors },
+  } = useForm<BlogFormData>({
+    resolver: yupResolver(validationSchema),
+    defaultValues: {
+      blogTitle: "",
+      description: "",
+      profilePhoto: "",
+    },
+  });
+
+  const onSubmit = (data: BlogFormData) => {
+    const formData = new FormData();
+    formData.append("blogTitle", data.blogTitle);
+    formData.append("description", data.description);
+    formData.append("profilePhoto", data.profilePhoto[0]); // Append the file
+
+    console.log(formData);
+    // Use formData for an API call
+  };
+
   return (
     <>
       <div className="grid grid-cols-1 gap-8">
@@ -14,46 +76,43 @@ const BlogForm = () => {
               </h3>
             </div>
             <div className="p-7">
-              <form>
-                <div
-                  id="FileUpload"
-                  className="relative mb-5.5 block w-full cursor-pointer appearance-none rounded-xl border border-dashed border-gray-4 bg-gray-2 px-4 py-4 hover:border-primary dark:border-dark-3 dark:bg-dark-2 dark:hover:border-primary sm:py-7.5"
-                >
-                  <input
-                    type="file"
-                    name="profilePhoto"
-                    id="profilePhoto"
-                    accept="image/png, image/jpg, image/jpeg"
-                    className="absolute inset-0 z-50 m-0 h-full w-full cursor-pointer p-0 opacity-0 outline-none"
-                  />
-                  <div className="flex flex-col items-center justify-center">
-                    <span className="flex h-13.5 w-13.5 items-center justify-center rounded-full border border-stroke bg-white dark:border-dark-3 dark:bg-gray-dark">
-                      <svg
-                        width="20"
-                        height="20"
-                        viewBox="0 0 20 20"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          d="M10.4613 2.07827C10.3429 1.94876 10.1755 1.875 10 1.875C9.82453 1.875 9.65714 1.94876 9.53873 2.07827L6.2054 5.7241C5.97248 5.97885 5.99019 6.37419 6.24494 6.6071C6.49969 6.84002 6.89502 6.82232 7.12794 6.56756L9.375 4.10984V13.3333C9.375 13.6785 9.65482 13.9583 10 13.9583C10.3452 13.9583 10.625 13.6785 10.625 13.3333V4.10984L12.8721 6.56756C13.105 6.82232 13.5003 6.84002 13.7551 6.6071C14.0098 6.37419 14.0275 5.97885 13.7946 5.7241L10.4613 2.07827Z"
-                          fill="#5750F1"
-                        />
-                        <path
-                          d="M3.125 12.5C3.125 12.1548 2.84518 11.875 2.5 11.875C2.15482 11.875 1.875 12.1548 1.875 12.5V12.5457C1.87498 13.6854 1.87497 14.604 1.9721 15.3265C2.07295 16.0765 2.2887 16.7081 2.79029 17.2097C3.29189 17.7113 3.92345 17.9271 4.67354 18.0279C5.39602 18.125 6.31462 18.125 7.45428 18.125H12.5457C13.6854 18.125 14.604 18.125 15.3265 18.0279C16.0766 17.9271 16.7081 17.7113 17.2097 17.2097C17.7113 16.7081 17.9271 16.0765 18.0279 15.3265C18.125 14.604 18.125 13.6854 18.125 12.5457V12.5C18.125 12.1548 17.8452 11.875 17.5 11.875C17.1548 11.875 16.875 12.1548 16.875 12.5C16.875 13.6962 16.8737 14.5304 16.789 15.1599C16.7068 15.7714 16.5565 16.0952 16.3258 16.3258C16.0952 16.5565 15.7714 16.7068 15.1599 16.789C14.5304 16.8737 13.6962 16.875 12.5 16.875H7.5C6.30382 16.875 5.46956 16.8737 4.8401 16.789C4.22862 16.7068 3.90481 16.5565 3.67418 16.3258C3.44354 16.0952 3.29317 15.7714 3.21096 15.1599C3.12633 14.5304 3.125 13.6962 3.125 12.5Z"
-                          fill="#5750F1"
-                        />
-                      </svg>
-                    </span>
-                    <p className="mt-2.5 text-body-sm font-medium">
-                      <span className="text-primary">Click to upload</span> or
-                      drag and drop
-                    </p>
-                    <p className="mt-1 text-body-xs">
-                      SVG, PNG, JPG or GIF (max, 800 X 800px)
-                    </p>
-                  </div>
-                </div>
+              <form onSubmit={handleSubmit(onSubmit)}>
+                <Controller
+                  name="profilePhoto"
+                  control={control}
+                  render={({ field }) => (
+                    <div
+                      id="FileUpload"
+                      className="relative mb-5.5 block w-full cursor-pointer appearance-none rounded-xl border border-dashed border-gray-4 bg-gray-2 px-4 py-4 hover:border-primary dark:border-dark-3 dark:bg-dark-2 dark:hover:border-primary sm:py-7.5"
+                    >
+                      <input
+                        type="file"
+                        id="profilePhoto"
+                        accept="image/png, image/jpg, image/jpeg"
+                        className="absolute inset-0 z-50 m-0 h-full w-full cursor-pointer p-0 opacity-0 outline-none"
+                        onChange={(e) => field.onChange(e.target.files)}
+                      />
+                      <div className="flex flex-col items-center justify-center">
+                        <span className="flex h-13.5 w-13.5 items-center justify-center rounded-full border border-stroke bg-white dark:border-dark-3 dark:bg-gray-dark">
+                          {/* SVG Icon */}
+                        </span>
+                        <p className="mt-2.5 text-body-sm font-medium">
+                          <span className="text-primary">Click to upload</span>{" "}
+                          or drag and drop
+                        </p>
+                        <p className="mt-1 text-body-xs">
+                          SVG, PNG, JPG or GIF (max, 800 X 800px)
+                        </p>
+                      </div>
+                    </div>
+                  )}
+                />
+                {errors.profilePhoto && (
+                  <p className="my-2 text-sm text-red-500">
+                    {errors.profilePhoto.message}
+                  </p>
+                )}
+
                 <div className="mb-5.5">
                   <label
                     className="mb-3 block text-body-sm font-medium text-dark dark:text-white"
@@ -62,18 +121,49 @@ const BlogForm = () => {
                     Blog Title
                   </label>
                   <input
-                    className="w-full rounded-[7px] border-[1.5px] border-stroke bg-white py-2.5 px-4.5 text-dark focus:border-primary focus-visible:outline-none dark:border-dark-3 dark:bg-dark-2 dark:text-white dark:focus:border-primary"
+                    {...register("blogTitle")}
+                    className={`w-full rounded-[7px] border-[1.5px] border-stroke bg-white px-4.5 py-2.5 text-dark focus:border-primary focus-visible:outline-none dark:border-dark-3 dark:bg-dark-2 dark:text-white dark:focus:border-primary ${
+                      errors.blogTitle ? "border-red-500" : ""
+                    }`}
                     type="text"
                     name="blogTitle"
                     id="blogTitle"
                     placeholder="Type your blog title"
                   />
+                  {errors.blogTitle && (
+                    <p className="mt-1 text-sm text-red-500">
+                      {errors.blogTitle.message}
+                    </p>
+                  )}
                 </div>
+                <div className="mb-5.5">
+                  <label
+                    className="mb-3 block text-body-sm font-medium text-dark dark:text-white"
+                    htmlFor="description"
+                  >
+                    Blog Description
+                  </label>
 
+                  <Controller
+                    name="description"
+                    control={control}
+                    render={({ field }) => (
+                      <Tiptap
+                        content={field.value}
+                        onChange={(value) => field.onChange(value)}
+                      />
+                    )}
+                  />
+                  {errors.description && (
+                    <p className="mt-1 text-sm text-red-500">
+                      {errors.description.message}
+                    </p>
+                  )}
+                </div>
                 <div className="flex justify-end gap-3">
                   <button
                     className="flex justify-center rounded-[7px] border border-stroke px-6 py-[7px] font-medium text-dark hover:shadow-1 dark:border-dark-3 dark:text-white"
-                    type="submit"
+                    type="button"
                   >
                     Cancel
                   </button>
