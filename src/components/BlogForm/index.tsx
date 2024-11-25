@@ -5,8 +5,8 @@ import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 import Tiptap from "../Tiptap";
+import Image from "next/image";
 
-// Define form validation schema using Yup
 const validationSchema = Yup.object().shape({
   blogTitle: Yup.string().required("Blog title is required"),
   description: Yup.string()
@@ -17,21 +17,7 @@ const validationSchema = Yup.object().shape({
         : "";
       return textContent.length > 0;
     }),
-  profilePhoto: Yup.mixed()
-    .required("Profile photo is required")
-    .test(
-      "fileSize",
-      "File size must be less than 1MB",
-      (value) => !value || (value && value[0]?.size <= 1024 * 1024), // 1MB limit
-    )
-    .test(
-      "fileType",
-      "Only PNG, JPG, or JPEG images are allowed",
-      (value) =>
-        !value ||
-        (value &&
-          ["image/png", "image/jpg", "image/jpeg"].includes(value[0]?.type)),
-    ),
+  profilePhoto: Yup.string().required("Profile photo is required"),
 });
 
 interface BlogFormData {
@@ -59,10 +45,9 @@ const BlogForm = () => {
     const formData = new FormData();
     formData.append("blogTitle", data.blogTitle);
     formData.append("description", data.description);
-    formData.append("profilePhoto", data.profilePhoto[0]); // Append the file
+    formData.append("profilePhoto", data.profilePhoto[0]);
 
     console.log(formData);
-    // Use formData for an API call
   };
 
   return (
@@ -90,16 +75,33 @@ const BlogForm = () => {
                         id="profilePhoto"
                         accept="image/png, image/jpg, image/jpeg"
                         className="absolute inset-0 z-50 m-0 h-full w-full cursor-pointer p-0 opacity-0 outline-none"
-                        onChange={(e) => field.onChange(e.target.files)}
+                        onChange={(e) => {
+                          const file = e.target.files?.[0];
+                          if (file) {
+                            field.onChange(file);
+                          }
+                        }}
                       />
                       <div className="flex flex-col items-center justify-center">
-                        <span className="flex h-13.5 w-13.5 items-center justify-center rounded-full border border-stroke bg-white dark:border-dark-3 dark:bg-gray-dark">
-                          {/* SVG Icon */}
-                        </span>
-                        <p className="mt-2.5 text-body-sm font-medium">
-                          <span className="text-primary">Click to upload</span>{" "}
-                          or drag and drop
-                        </p>
+                        {field.value ? (
+                          <Image
+                            src={URL.createObjectURL(field.value)}
+                            alt="Profile Preview"
+                            width={300}
+                            height={300}
+                            className="h-20 w-20 rounded-xl border border-stroke bg-white dark:border-dark-3 dark:bg-gray-dark"
+                          />
+                        ) : (
+                          <span className="flex h-20 w-20 items-center justify-center rounded-xl border border-stroke bg-white dark:border-dark-3 dark:bg-gray-dark" />
+                        )}
+                        {!field.value && (
+                          <p className="mt-2.5 text-body-sm font-medium">
+                            <span className="text-primary">
+                              Click to upload
+                            </span>{" "}
+                            or drag and drop
+                          </p>
+                        )}
                         <p className="mt-1 text-body-xs">
                           SVG, PNG, JPG or GIF (max, 800 X 800px)
                         </p>
