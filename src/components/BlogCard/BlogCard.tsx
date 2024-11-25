@@ -3,7 +3,7 @@ import Image from "next/image";
 
 const BlogCard: React.FC = () => {
   return (
-    <div className="grid grid-cols-1 gap-4 md:grid-cols-3 md:gap-6 xl:grid-cols-3 2xl:gap-7.5 mt-8">
+    <div className="mt-8 grid grid-cols-1 gap-4 md:grid-cols-3 md:gap-6 xl:grid-cols-3 2xl:gap-7.5">
       {Array.from({ length: 3 }).map((_, index) => (
         <div
           key={index}
@@ -25,6 +25,10 @@ const BlogCard: React.FC = () => {
               Lorem ipsum dolor sit amet, vehiculaum ero felis loreum fitiona
               fringilla goes scelerisque Interdum et.
             </span>
+            <div className="flex items-center justify-between w-full mt-8">
+              <p className="text-base font-medium">By ChicFlowers</p>
+              <p className="text-base font-medium">November 12, 2024</p>
+            </div>
           </div>
         </div>
       ))}
