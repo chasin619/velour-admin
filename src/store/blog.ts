@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import axios from "axios";
+import toast from "react-hot-toast";
 
 interface BlogStore {
   blogs: string[];
@@ -21,8 +22,9 @@ const useBlogStore = create<BlogStoreState>((set) => ({
   },
   addBlog: async (payload) => {
     try {
-      const response = await axios.post("/api/addBlogs", payload);
+      const response = await axios.post("/api/addBlog", payload);
       set({ blogs: response.data.blogs });
+      toast.success(response.data.message);
     } catch (error: any) {
       console.log(error.message);
     }

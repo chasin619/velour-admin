@@ -6,48 +6,58 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 import Tiptap from "../Tiptap";
 import Image from "next/image";
+import useBlogStore from "@/store/blog";
 
 const validationSchema = Yup.object().shape({
-  blogTitle: Yup.string().required("Blog title is required"),
-  description: Yup.string()
-    .required("Description is required")
-    .test("is-not-empty", "Description is required", (value) => {
+  title: Yup.string()
+    .required("title is required")
+    .min(30, "Minimun 30 word are required in title")
+    .max(100, "Maximum 100 word are required in title"),
+  author: Yup.string().required("title is required"),
+  image: Yup.string().required("Blog photo is required"),
+  content: Yup.string()
+    .required("content is required")
+    .min(100, "Minimun 100 word are required in title")
+    .test("is-not-empty", "content is required", (value) => {
       const textContent = value
         ? value.replace(/<\/?[^>]+(>|$)/g, "").trim()
         : "";
       return textContent.length > 0;
     }),
-  profilePhoto: Yup.string().required("Profile photo is required"),
 });
 
 interface BlogFormData {
-  blogTitle: string;
-  description: string;
-  profilePhoto: string;
+  title: string;
+  content: string;
+  image: string;
+  author: string;
 }
 
 const BlogForm = () => {
+  const { addBlog } = useBlogStore();
   const {
     register,
     handleSubmit,
     control,
-    formState: { errors },
+    reset,
+    formState: { errors, defaultValues },
   } = useForm<BlogFormData>({
     resolver: yupResolver(validationSchema),
     defaultValues: {
-      blogTitle: "",
-      description: "",
-      profilePhoto: "",
+      title: "",
+      content: "",
+      image: "",
+      author: "",
     },
   });
 
-  const onSubmit = (data: BlogFormData) => {
-    const formData = new FormData();
-    formData.append("blogTitle", data.blogTitle);
-    formData.append("description", data.description);
-    formData.append("profilePhoto", data.profilePhoto[0]);
-
-    console.log(formData);
+  const onSubmit = async (payload: BlogFormData) => {
+    try {
+      await addBlog(payload);
+      reset();
+    } catch (error) {
+      console.error("Error:", error);
+    }
   };
 
   return (
@@ -63,7 +73,7 @@ const BlogForm = () => {
             <div className="p-7">
               <form onSubmit={handleSubmit(onSubmit)}>
                 <Controller
-                  name="profilePhoto"
+                  name="image"
                   control={control}
                   render={({ field }) => (
                     <div
@@ -72,7 +82,7 @@ const BlogForm = () => {
                     >
                       <input
                         type="file"
-                        id="profilePhoto"
+                        id="image"
                         accept="image/png, image/jpg, image/jpeg"
                         className="absolute inset-0 z-50 m-0 h-full w-full cursor-pointer p-0 opacity-0 outline-none"
                         onChange={(e) => {
@@ -109,56 +119,80 @@ const BlogForm = () => {
                     </div>
                   )}
                 />
-                {errors.profilePhoto && (
+                {errors.image && (
                   <p className="my-2 text-sm text-red-500">
-                    {errors.profilePhoto.message}
+                    {errors.image.message}
                   </p>
                 )}
 
                 <div className="mb-5.5">
                   <label
                     className="mb-3 block text-body-sm font-medium text-dark dark:text-white"
-                    htmlFor="blogTitle"
+                    htmlFor="title"
                   >
                     Blog Title
                   </label>
                   <input
-                    {...register("blogTitle")}
+                    {...register("title")}
                     className={`w-full rounded-[7px] border-[1.5px] border-stroke bg-white px-4.5 py-2.5 text-dark focus:border-primary focus-visible:outline-none dark:border-dark-3 dark:bg-dark-2 dark:text-white dark:focus:border-primary ${
-                      errors.blogTitle ? "border-red-500" : ""
+                      errors.title ? "border-red-500" : ""
                     }`}
                     type="text"
-                    name="blogTitle"
-                    id="blogTitle"
+                    name="title"
+                    id="title"
                     placeholder="Type your blog title"
                   />
-                  {errors.blogTitle && (
+                  {errors.title && (
                     <p className="mt-1 text-sm text-red-500">
-                      {errors.blogTitle.message}
+                      {errors.title.message}
                     </p>
                   )}
                 </div>
                 <div className="mb-5.5">
                   <label
                     className="mb-3 block text-body-sm font-medium text-dark dark:text-white"
-                    htmlFor="description"
+                    htmlFor="author"
                   >
-                    Blog Description
+                    Author Name
+                  </label>
+                  <input
+                    {...register("author")}
+                    className={`w-full rounded-[7px] border-[1.5px] border-stroke bg-white px-4.5 py-2.5 text-dark focus:border-primary focus-visible:outline-none dark:border-dark-3 dark:bg-dark-2 dark:text-white dark:focus:border-primary ${
+                      errors.title ? "border-red-500" : ""
+                    }`}
+                    type="text"
+                    name="author"
+                    id="author"
+                    placeholder="Type your blog author"
+                  />
+                  {errors.author && (
+                    <p className="mt-1 text-sm text-red-500">
+                      {errors.author.message}
+                    </p>
+                  )}
+                </div>
+                <div className="mb-5.5">
+                  <label
+                    className="mb-3 block text-body-sm font-medium text-dark dark:text-white"
+                    htmlFor="content"
+                  >
+                    Blog content
                   </label>
 
                   <Controller
-                    name="description"
+                    name="content"
                     control={control}
                     render={({ field }) => (
                       <Tiptap
+                        key={field.value}
                         content={field.value}
                         onChange={(value) => field.onChange(value)}
                       />
                     )}
                   />
-                  {errors.description && (
+                  {errors.content && (
                     <p className="mt-1 text-sm text-red-500">
-                      {errors.description.message}
+                      {errors.content.message}
                     </p>
                   )}
                 </div>
