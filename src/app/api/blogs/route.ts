@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import Blog from "../models/blog";
+import dbConnect from "@/libs/db";
 
 interface BlogDocument {
   _id: string;
@@ -13,6 +14,8 @@ interface BlogDocument {
 
 export async function GET(): Promise<NextResponse> {
   try {
+    await dbConnect();
+
     const blogs: BlogDocument[] = await Blog.find();
 
     return NextResponse.json({ blogs }, { status: 200 });

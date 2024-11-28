@@ -15,7 +15,7 @@ const BlogCard: React.FC<BlogCardProps> = ({ blogs }) => {
           className="rounded-[10px] bg-white p-4 shadow-1 dark:bg-gray-dark"
         >
           <Image
-            src={"/images/dummy-card.webp"}
+            src={blog.image}
             alt={blog.title}
             layout="responsive"
             width={200}
@@ -26,9 +26,12 @@ const BlogCard: React.FC<BlogCardProps> = ({ blogs }) => {
             <h4 className="mb-1.5 mt-4 text-heading-6 font-bold text-dark dark:text-white">
               {blog.title}
             </h4>
-            <span className="text-base font-medium">
-              {blog.content.substring(0, 100)}...
-            </span>
+            <span
+              className="text-base font-medium"
+              dangerouslySetInnerHTML={{
+                __html: blog.content.substring(0, 100) + "...",
+              }}
+            />
             <div className="mt-8 flex w-full items-center justify-between">
               <p className="text-base font-medium">By {blog.author}</p>
               <p className="text-base font-medium">
