@@ -1,8 +1,11 @@
 declare global {
   type BlogStoreState = {
-    blogs: string[];
-    initilizeBlogStore: () => Promise<void>;
+    blogs: any[];
+    reviews: any[];
+    initilizeHomeStore: () => Promise<void>;
+    getAllBlogs: () => Promise<void>;
     addBlog: (payload: any) => Promise<void>;
+    getReviews: () => Promise<void>;
     reset: () => void;
   };
 }

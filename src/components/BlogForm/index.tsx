@@ -8,7 +8,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 import Tiptap from "../Tiptap";
 
-import useBlogStore from "@/store/blog";
+import useHomeStore from "@/store/home";
 import { uploadToS3 } from "@/utils/helpers";
 
 const validationSchema = Yup.object().shape({
@@ -37,7 +37,7 @@ interface BlogFormData {
 }
 
 const BlogForm = () => {
-  const { addBlog } = useBlogStore();
+  const { addBlog } = useHomeStore();
   const { push } = useRouter();
   const [key, setKey] = useState(0);
   const {

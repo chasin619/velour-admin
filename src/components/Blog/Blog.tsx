@@ -3,13 +3,13 @@
 import React, { useEffect } from "react";
 import BlogCard from "../BlogCard/BlogCard";
 import { Button } from "../Button";
-import useBlogStore from "@/store/blog";
+import useHomeStore from "@/store/home";
 
 const Blog: React.FC = () => {
-  const { initilizeBlogStore, blogs } = useBlogStore();
+  const { initilizeHomeStore, blogs } = useHomeStore();
 
   useEffect(() => {
-    initilizeBlogStore();
+    initilizeHomeStore();
   }, []);
 
   return (
