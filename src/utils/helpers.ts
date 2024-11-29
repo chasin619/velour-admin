@@ -10,7 +10,7 @@ export const formatDate = (date: string | Date): string => {
   return new Date(date).toLocaleDateString("en-US", options);
 };
 
-export const uploadToS3 = async (file: any) => {
+export const uploadToS3 = async (file: any, fileName: string) => {
   AWS.config.update({
     accessKeyId: process.env.NEXT_PUBLIC_AWS_ACCESS_KEY_ID,
     secretAccessKey: process.env.NEXT_PUBLIC_AWS_SECRET_ACCESS_KEY,
@@ -21,7 +21,7 @@ export const uploadToS3 = async (file: any) => {
 
   const params: AWS.S3.PutObjectRequest = {
     Bucket: process.env.NEXT_PUBLIC_AWS_S3_BUCKET_NAME!,
-    Key: `blog/${Date.now()}`,
+    Key: `${fileName}/${Date.now()}`,
     Body: file,
     ContentType: "image/jpeg",
     ACL: "public-read",

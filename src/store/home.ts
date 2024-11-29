@@ -12,7 +12,7 @@ const initialValues: BlogStore = {
   reviews: [],
 };
 
-const useHomeStore = create<BlogStoreState>((set, get) => ({
+const useHomeStore = create<HomeStoreState>((set, get) => ({
   ...initialValues,
   initilizeHomeStore: async () => {
     const { getAllBlogs, getReviews } = get();
@@ -28,9 +28,10 @@ const useHomeStore = create<BlogStoreState>((set, get) => ({
     }
   },
   addBlog: async (payload) => {
+    const { blogs } = get();
     try {
       const response = await axios.post("/api/addBlog", payload);
-      set({ blogs: response.data.blogs });
+      set({ blogs: [...blogs, response.data.blog] });
       toast.success(response.data.message);
     } catch (error: any) {
       console.log(error.message);
@@ -40,6 +41,16 @@ const useHomeStore = create<BlogStoreState>((set, get) => ({
     try {
       const response = await axios.get("/api/reviews");
       set({ reviews: response.data.reviews });
+    } catch (error: any) {
+      console.log(error.message);
+    }
+  },
+  addReview: async (payload) => {
+    const { reviews } = get();
+    try {
+      const response = await axios.post("/api/addReview", payload);
+      set({ reviews: [...reviews, response.data.review] });
+      toast.success(response.data.message);
     } catch (error: any) {
       console.log(error.message);
     }
