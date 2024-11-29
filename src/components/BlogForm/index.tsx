@@ -1,11 +1,13 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 import Tiptap from "../Tiptap";
-import Image from "next/image";
+
 import useBlogStore from "@/store/blog";
 import { uploadToS3 } from "@/utils/helpers";
 
@@ -36,12 +38,14 @@ interface BlogFormData {
 
 const BlogForm = () => {
   const { addBlog } = useBlogStore();
+  const { push } = useRouter();
+  const [key, setKey] = useState(0);
   const {
     register,
     handleSubmit,
     control,
     reset,
-    formState: { errors },
+    formState: { errors, isDirty },
   } = useForm<BlogFormData>({
     resolver: yupResolver(validationSchema),
     defaultValues: {
@@ -59,10 +63,27 @@ const BlogForm = () => {
 
       await addBlog(finalPayload);
       reset();
+      setKey((prevKey) => prevKey + 1);
     } catch (error) {
       console.error("Error:", error);
     }
   };
+
+  useEffect(() => {
+    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+      if (isDirty) {
+        event.preventDefault();
+        event.returnValue =
+          "You have unsaved changes. Are you sure you want to leave?";
+      }
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, [isDirty]);
 
   return (
     <div className="grid grid-cols-1 gap-8">
@@ -159,7 +180,7 @@ const BlogForm = () => {
                 <input
                   {...register("author")}
                   className={`w-full rounded-[7px] border-[1.5px] border-stroke bg-white px-4.5 py-2.5 text-dark focus:border-primary focus-visible:outline-none dark:border-dark-3 dark:bg-dark-2 dark:text-white dark:focus:border-primary ${
-                    errors.title ? "border-red-500" : ""
+                    errors.author ? "border-red-500" : ""
                   }`}
                   type="text"
                   name="author"
@@ -185,6 +206,7 @@ const BlogForm = () => {
                   control={control}
                   render={({ field }) => (
                     <Tiptap
+                      key={key}
                       content={field.value}
                       onChange={(value) => field.onChange(value)}
                     />
@@ -200,6 +222,7 @@ const BlogForm = () => {
                 <button
                   className="flex justify-center rounded-[7px] border border-stroke px-6 py-[7px] font-medium text-dark hover:shadow-1 dark:border-dark-3 dark:text-white"
                   type="button"
+                  onClick={() => push("/")}
                 >
                   Cancel
                 </button>
