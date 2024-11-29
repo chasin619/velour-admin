@@ -1,35 +1,14 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useForm, Controller } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as Yup from "yup";
+import { Controller } from "react-hook-form";
+
 import Tiptap from "../Tiptap";
+import useBlogForm from "./action";
 
-import useHomeStore from "@/store/home";
-import { uploadToS3 } from "@/utils/helpers";
-
-const validationSchema = Yup.object().shape({
-  title: Yup.string()
-    .required("Title is required")
-    .min(30, "Minimum 30 words are required in the title")
-    .max(100, "Maximum 100 words are required in the title"),
-  author: Yup.string().required("Author is required"),
-  image: Yup.mixed().required("Blog photo is required"),
-  content: Yup.string()
-    .required("Content is required")
-    .min(100, "Minimum 100 words are required in the content")
-    .test("is-not-empty", "Content is required", (value) => {
-      const textContent = value
-        ? value.replace(/<\/?[^>]+(>|$)/g, "").trim()
-        : "";
-      return textContent.length > 0;
-    }),
-});
-
-interface BlogFormData {
+export interface BlogFormData {
   title: string;
   content: string;
   image: string;
@@ -37,53 +16,14 @@ interface BlogFormData {
 }
 
 const BlogForm = () => {
-  const { addBlog } = useHomeStore();
   const { push } = useRouter();
-  const [key, setKey] = useState(0);
+  const { onSubmit, form } = useBlogForm();
   const {
-    register,
     handleSubmit,
+    register,
     control,
-    reset,
-    formState: { errors, isDirty },
-  } = useForm<BlogFormData>({
-    resolver: yupResolver(validationSchema),
-    defaultValues: {
-      title: "",
-      content: "",
-      image: "",
-      author: "",
-    },
-  });
-
-  const onSubmit = async (payload: BlogFormData) => {
-    try {
-      const imageUrl = await uploadToS3(payload.image);
-      const finalPayload = { ...payload, image: imageUrl };
-
-      await addBlog(finalPayload);
-      reset();
-      setKey((prevKey) => prevKey + 1);
-    } catch (error) {
-      console.error("Error:", error);
-    }
-  };
-
-  useEffect(() => {
-    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
-      if (isDirty) {
-        event.preventDefault();
-        event.returnValue =
-          "You have unsaved changes. Are you sure you want to leave?";
-      }
-    };
-
-    window.addEventListener("beforeunload", handleBeforeUnload);
-
-    return () => {
-      window.removeEventListener("beforeunload", handleBeforeUnload);
-    };
-  }, [isDirty]);
+    formState: { errors },
+  } = form;
 
   return (
     <div className="grid grid-cols-1 gap-8">
@@ -119,7 +59,9 @@ const BlogForm = () => {
                     <div className="flex flex-col items-center justify-center">
                       {field.value ? (
                         <Image
-                          src={URL.createObjectURL(field.value)}
+                          src={URL.createObjectURL(
+                            field.value as unknown as File,
+                          )}
                           alt="Profile Preview"
                           width={300}
                           height={300}
@@ -206,7 +148,6 @@ const BlogForm = () => {
                   control={control}
                   render={({ field }) => (
                     <Tiptap
-                      key={key}
                       content={field.value}
                       onChange={(value) => field.onChange(value)}
                     />
