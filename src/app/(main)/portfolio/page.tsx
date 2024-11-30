@@ -1,16 +1,110 @@
+"use client";
+
 import React from "react";
+import { Controller } from "react-hook-form";
 import { Button } from "@/components/Button";
+import Modal from "@/components/Modal";
+import { Input } from "@/components/Input";
+import usePortfolio from "./action";
 
 const Portfolio = () => {
+  const { closeModal, isVisible, openModal, onSubmit, form, handleFileChange } =
+    usePortfolio();
+  const {
+    register,
+    control,
+    formState: { errors },
+  } = form;
+
   return (
-    <div className="items-cener flex justify-between">
-      <h2 className="text-[32px] font-bold leading-[30px] text-dark dark:text-white ">
+    <div className="flex items-center justify-between">
+      <h2 className="text-[32px] font-bold leading-[30px] text-dark dark:text-white">
         Portfolio
       </h2>
       <Button
         label="Add Portfolio"
         customClasses="bg-primary text-white rounded-md p-4 py-3"
+        onClick={openModal}
       />
+      <Modal
+        visible={isVisible}
+        title="Add Portfolio"
+        onRequestClose={closeModal}
+        ok="Submit"
+        onConfirm={onSubmit}
+      >
+        <Input
+          register={register("title")}
+          label="Portfolio Title"
+          name="title"
+          placeholder="Type your Portfolio Title here"
+          error={errors.title}
+        />
+
+        <Controller
+          name="images"
+          control={control}
+          render={({ field }) => (
+            <>
+              <div
+                id="FileUpload"
+                className="relative mb-5.5 block w-full cursor-pointer appearance-none rounded-xl border border-dashed border-gray-4 bg-gray-2 px-4 py-4 hover:border-primary dark:border-dark-3 dark:bg-dark-2 dark:hover:border-primary sm:py-7.5"
+              >
+                <input
+                  type="file"
+                  id="image"
+                  accept="image/png, image/jpg, image/jpeg"
+                  className="absolute inset-0 z-50 m-0 h-full w-full cursor-pointer p-0 opacity-0 outline-none"
+                  multiple
+                  onChange={(e) => handleFileChange(e)}
+                />
+                <div className="flex flex-col items-center justify-center">
+                  {!field.value || field.value.length === 0 ? (
+                    <p className="mt-2.5 text-body-sm font-medium">
+                      <span className="text-primary">Click to upload</span> or
+                      drag and drop
+                    </p>
+                  ) : (
+                    <p className="mt-2.5 text-body-sm font-medium">
+                      {field.value.length} images selected
+                    </p>
+                  )}
+                  <p className="mt-1 text-body-xs">
+                    SVG, PNG, JPG or GIF (max, 800 X 800px)
+                  </p>
+                </div>
+              </div>
+              {errors.images && (
+                <p className="my-2 text-sm text-red-500">
+                  {errors.images.message}
+                </p>
+              )}
+              <div className="mt-8">
+                <h3 className="mb-4 text-lg font-semibold text-gray-800 dark:text-white">
+                  Uploaded Images
+                </h3>
+                <div className="flex flex-wrap gap-4">
+                  {field.value && field.value.length > 0 ? (
+                    field.value.map((file, index) => {
+                      return (
+                        <div key={index} className="h-20 w-20">
+                          <img
+                            src={file.preview}
+                            alt={`Preview ${index + 1}`}
+                            className="h-full w-full rounded-lg object-cover"
+                          />
+                        </div>
+                      );
+                    })
+                  ) : (
+                    <p>No images uploaded yet</p>
+                  )}
+                </div>
+              </div>
+            </>
+          )}
+        />
+      </Modal>
     </div>
   );
 };
