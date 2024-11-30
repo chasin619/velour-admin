@@ -1,7 +1,6 @@
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
-import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 import { Metadata } from "next";
 import Signin from "@/components/Auth/Signin";
 import AuthLayout from "@/components/Layouts/AuthLayout";
