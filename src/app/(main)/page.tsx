@@ -1,17 +1,14 @@
-import { Metadata } from "next";
-import React from "react";
-import { Blog } from "@/components/Blog";
+"use client";
 
-export const metadata: Metadata = {
-  title:
-    "Next.js E-commerce Dashboard Page | NextAdmin - Next.js Dashboard Kit",
-  description: "This is Next.js Home page for NextAdmin Dashboard Kit",
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+
+const Home = () => {
+  const { push } = useRouter();
+
+  useEffect(() => {
+    push("/blog");
+  }, []);
 };
 
-export default function Home() {
-  return (
-    <>
-      <Blog />
-    </>
-  );
-}
+export default Home;
