@@ -127,10 +127,9 @@ const Portfolio = () => {
             <Image
               src={item.images?.[0]}
               alt={item.title}
-              layout="responsive"
               width={200}
               height={120}
-              className="rounded-lg"
+              className="rounded-lg w-full h-40 lg:h-52 object-cover"
             />
             <h4 className="mb-1.5 mt-4 text-heading-6 font-bold text-dark dark:text-white">
               {item.title}

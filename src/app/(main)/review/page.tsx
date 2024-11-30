@@ -32,11 +32,10 @@ const Review = () => {
             <Image
               src={review.image}
               alt="Review Image"
-              layout="responsive"
               width={200}
               height={120}
               loading="lazy"
-              className="rounded-lg"
+              className="rounded-lg w-full h-48 lg:h-56 object-cover"
             />
           </div>
         ))}
