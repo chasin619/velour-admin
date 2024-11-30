@@ -7,13 +7,14 @@ import React, { useEffect, useState } from "react";
 import Loader from "@/components/common/Loader";
 import DefaultLayout from "@/components/Layouts/DefaultLayout";
 import { Toaster } from "react-hot-toast";
+import useHomeStore from "@/store/home";
 
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const [loading, setLoading] = useState<boolean>(true);
+  const { loading, setLoading } = useHomeStore();
 
   useEffect(() => {
     setTimeout(() => setLoading(false), 500);

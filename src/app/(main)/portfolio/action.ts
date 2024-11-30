@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useHomeStore from "@/store/home";
 import { uploadToS3 } from "@/utils/helpers";
 import { BucketFolderName } from "@/enum/bucket";
@@ -7,7 +7,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { PortfolioSchema } from "./schema";
 
 const usePortfolio = () => {
-  const { portfolios, addPortfolio } = useHomeStore();
+  const { portfolios, addPortfolio, getPortfolios } = useHomeStore();
   const [isVisible, setIsVisible] = useState<boolean>(false);
 
   const form = useForm({
@@ -17,6 +17,10 @@ const usePortfolio = () => {
       images: [],
     },
   });
+
+  useEffect(() => {
+    getPortfolios();
+  }, []);
 
   const onSubmit = async (payload: any) => {
     try {

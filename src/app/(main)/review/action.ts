@@ -1,11 +1,15 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useHomeStore from "@/store/home";
 import { uploadToS3 } from "@/utils/helpers";
 import { BucketFolderName } from "@/enum/bucket";
 
 const useReview = () => {
-  const { reviews, addReview } = useHomeStore();
+  const { reviews, addReview, getReviews } = useHomeStore();
   const [isVisible, setIsVisible] = useState<boolean>(false);
+
+  useEffect(() => {
+    getReviews();
+  }, []);
 
   const handleSubmit = async (payload: File | null) => {
     try {

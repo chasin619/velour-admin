@@ -9,7 +9,7 @@ import { BlogFormSchema } from "./schema";
 import { BlogFormData } from ".";
 
 const useBlogForm = () => {
-  const { addBlog } = useHomeStore();
+  const { addBlog, setLoading } = useHomeStore();
   const form = useForm<BlogFormData>({
     resolver: yupResolver(BlogFormSchema),
     defaultValues: {
@@ -22,11 +22,13 @@ const useBlogForm = () => {
 
   const onSubmit = async (payload: BlogFormData) => {
     try {
+      setLoading(true);
       const imageUrl = await uploadToS3(payload.image, BucketFolderName.Blog);
       const finalPayload = { ...payload, image: imageUrl };
 
       await addBlog(finalPayload);
       form.reset();
+      setLoading(false);
     } catch (error) {
       console.error("Error:", error);
     }

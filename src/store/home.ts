@@ -6,21 +6,24 @@ interface BlogStore {
   blogs: any[];
   reviews: any[];
   portfolios: any[];
+  loading: boolean;
 }
 
 const initialValues: BlogStore = {
   blogs: [],
   reviews: [],
   portfolios: [],
+  loading: false,
 };
 
 const useHomeStore = create<HomeStoreState>((set, get) => ({
   ...initialValues,
   initilizeHomeStore: async () => {
-    const { getAllBlogs, getReviews, getPortfolios } = get();
+    const { getAllBlogs } = get();
     await getAllBlogs();
-    await getReviews();
-    await getPortfolios();
+  },
+  setLoading: (loading) => {
+    set({ loading });
   },
   getAllBlogs: async () => {
     try {

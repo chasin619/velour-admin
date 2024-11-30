@@ -3,6 +3,8 @@ declare global {
     blogs: any[];
     reviews: any[];
     portfolios: any[];
+    loading: boolean;
+    setLoading: (loading: boolean) => void;
     initilizeHomeStore: () => Promise<void>;
     getAllBlogs: () => Promise<void>;
     addBlog: (payload: any) => Promise<void>;
