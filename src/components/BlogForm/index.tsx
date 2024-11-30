@@ -7,6 +7,7 @@ import { Controller } from "react-hook-form";
 
 import Tiptap from "../Tiptap";
 import useBlogForm from "./action";
+import { Input } from "../Input";
 
 export interface BlogFormData {
   title: string;
@@ -88,53 +89,20 @@ const BlogForm = () => {
                   {errors.image.message}
                 </p>
               )}
-
-              <div className="mb-5.5">
-                <label
-                  className="mb-3 block text-body-sm font-medium text-dark dark:text-white"
-                  htmlFor="title"
-                >
-                  Blog Title
-                </label>
-                <input
-                  {...register("title")}
-                  className={`w-full rounded-[7px] border-[1.5px] border-stroke bg-white px-4.5 py-2.5 text-dark focus:border-primary focus-visible:outline-none dark:border-dark-3 dark:bg-dark-2 dark:text-white dark:focus:border-primary ${
-                    errors.title ? "border-red-500" : ""
-                  }`}
-                  type="text"
-                  name="title"
-                  id="title"
-                  placeholder="Type your blog title"
-                />
-                {errors.title && (
-                  <p className="mt-1 text-sm text-red-500">
-                    {errors.title.message}
-                  </p>
-                )}
-              </div>
-              <div className="mb-5.5">
-                <label
-                  className="mb-3 block text-body-sm font-medium text-dark dark:text-white"
-                  htmlFor="author"
-                >
-                  Author Name
-                </label>
-                <input
-                  {...register("author")}
-                  className={`w-full rounded-[7px] border-[1.5px] border-stroke bg-white px-4.5 py-2.5 text-dark focus:border-primary focus-visible:outline-none dark:border-dark-3 dark:bg-dark-2 dark:text-white dark:focus:border-primary ${
-                    errors.author ? "border-red-500" : ""
-                  }`}
-                  type="text"
-                  name="author"
-                  id="author"
-                  placeholder="Type your blog author"
-                />
-                {errors.author && (
-                  <p className="mt-1 text-sm text-red-500">
-                    {errors.author.message}
-                  </p>
-                )}
-              </div>
+              <Input
+                register={register("title")}
+                label="Blog Title"
+                name="title"
+                placeholder="Type your Blog Title here"
+                error={errors.title}
+              />
+              <Input
+                register={register("author")}
+                label="Author Name"
+                name="author"
+                placeholder="Type your Blog Author here"
+                error={errors.author}
+              />
               <div className="mb-5.5">
                 <label
                   className="mb-3 block text-body-sm font-medium text-dark dark:text-white"
