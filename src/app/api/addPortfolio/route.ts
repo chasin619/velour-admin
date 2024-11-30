@@ -18,7 +18,7 @@ export async function POST(req: Request) {
     const portfolio = await Portfolio.create({ title, images });
 
     return NextResponse.json(
-      { message: "Review added successfully", portfolio },
+      { message: "Portfolio added successfully", portfolio },
       { status: 200 },
     );
   } catch (error: any) {

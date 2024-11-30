@@ -10,7 +10,10 @@ export const formatDate = (date: string | Date): string => {
   return new Date(date).toLocaleDateString("en-US", options);
 };
 
-export const uploadToS3 = async (file: any, fileName: string) => {
+export const uploadToS3 = async (
+  files: any,
+  folderName: string,
+): Promise<string | string[]> => {
   AWS.config.update({
     accessKeyId: process.env.NEXT_PUBLIC_AWS_ACCESS_KEY_ID,
     secretAccessKey: process.env.NEXT_PUBLIC_AWS_SECRET_ACCESS_KEY,
@@ -19,19 +22,25 @@ export const uploadToS3 = async (file: any, fileName: string) => {
 
   const s3 = new AWS.S3();
 
-  const params: AWS.S3.PutObjectRequest = {
-    Bucket: process.env.NEXT_PUBLIC_AWS_S3_BUCKET_NAME!,
-    Key: `${fileName}/${Date.now()}`,
-    Body: file,
-    ContentType: "image/jpeg",
-    ACL: "public-read",
+  const uploadSingleFile = async (file: any): Promise<string> => {
+    const params: AWS.S3.PutObjectRequest = {
+      Bucket: process.env.NEXT_PUBLIC_AWS_S3_BUCKET_NAME!,
+      Key: `${folderName}/${Date.now()}_${file.name}`,
+      Body: file,
+      ContentType: file.type || "image/jpeg",
+      ACL: "public-read",
+    };
+
+    const result = await s3.upload(params).promise();
+    return result.Location;
   };
 
-  try {
-    const data = await s3.upload(params).promise();
-    return data.Location;
-  } catch (error) {
-    console.error("Error uploading to S3:", error);
-    throw new Error("Error uploading file to S3");
+  if (Array.isArray(files)) {
+    console.log(files);
+    const uploadPromises = files.map((file) => uploadSingleFile(file.file));
+    const results = await Promise.all(uploadPromises);
+    return results;
+  } else {
+    return await uploadSingleFile(files);
   }
 };

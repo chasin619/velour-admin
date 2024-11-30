@@ -4,7 +4,10 @@ import { Button } from "../Button";
 interface ModalProps {
   visible: boolean;
   title: string;
-  ok?: string;
+  ok?: {
+    text: string;
+    type?: "button" | "submit" | "reset";
+  };
   onConfirm?: () => void;
   onRequestClose?: () => void;
   children?: ReactNode;
@@ -64,7 +67,8 @@ const Modal: React.FC<ModalProps> = ({
             Cancel
           </button>
           <Button
-            label={ok || "OK"}
+            label={ok?.text || "OK"}
+            type={ok?.type || "button"}
             onClick={onConfirm}
             customClasses="bg-blue-600 text-white rounded-md px-4 py-2 text-sm font-medium hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600"
           />

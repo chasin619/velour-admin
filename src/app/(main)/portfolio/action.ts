@@ -7,7 +7,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { PortfolioSchema } from "./schema";
 
 const usePortfolio = () => {
-  const { reviews } = useHomeStore();
+  const { portfolios, addPortfolio } = useHomeStore();
   const [isVisible, setIsVisible] = useState<boolean>(false);
 
   const form = useForm({
@@ -18,10 +18,15 @@ const usePortfolio = () => {
     },
   });
 
-  const onSubmit = async () => {
+  const onSubmit = async (payload: any) => {
     try {
-      // const image = await uploadToS3(payload, BucketFolderName.Review);
-      setIsVisible(false);
+      const images = await uploadToS3(
+        payload.images,
+        BucketFolderName.Portfolio,
+      );
+      await addPortfolio({ title: payload.title, images });
+      form.reset();
+      closeModal();
     } catch (error) {
       console.log(error);
     }
@@ -61,7 +66,7 @@ const usePortfolio = () => {
   return {
     onSubmit,
     closeModal,
-    reviews,
+    portfolios,
     isVisible,
     form,
     openModal,

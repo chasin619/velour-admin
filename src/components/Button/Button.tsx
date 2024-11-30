@@ -1,12 +1,13 @@
-import React from "react";
+import React, { ButtonHTMLAttributes } from "react";
 import Link from "next/link";
 
-interface ButtonPropTypes {
+interface ButtonPropTypes extends ButtonHTMLAttributes<HTMLButtonElement> {
   label: string;
   link?: string;
   customClasses?: string;
-  onClick?: () => void;
   children?: React.ReactNode;
+  onClick?: () => void;
+  props?: any;
 }
 
 const Button = ({
@@ -15,18 +16,26 @@ const Button = ({
   customClasses,
   children,
   onClick,
+  ...props
 }: ButtonPropTypes) => {
   return (
-    <>
-      <Link
-        className={`inline-flex items-center justify-center gap-2.5 text-center font-medium hover:bg-opacity-90 ${customClasses}`}
-        href={link ?? ""}
-        onClick={onClick}
-      >
-        {children}
-        {label}
-      </Link>
-    </>
+    <button
+      {...props}
+      onClick={onClick}
+      className={`inline-flex items-center justify-center gap-2.5 text-center font-medium hover:bg-opacity-90 ${customClasses}`}
+    >
+      {link ? (
+        <Link href={link}>
+          {children}
+          {label}
+        </Link>
+      ) : (
+        <>
+          {children}
+          {label}
+        </>
+      )}
+    </button>
   );
 };
 

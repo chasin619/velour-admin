@@ -45,7 +45,7 @@ const Review = () => {
         visible={isVisible}
         title="Add Review"
         onRequestClose={closeModal}
-        ok="Submit"
+        ok={{ text: "Submit" }}
         onConfirm={() => handleSubmit(selectedImage)}
       >
         <div
