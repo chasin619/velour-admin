@@ -18,7 +18,9 @@
     "apexcharts": "^3.45.2",
     "aws-sdk": "^2.1692.0",
     "axios": "^1.7.8",
+    "bcryptjs": "^2.4.3",
     "flatpickr": "^4.6.13",
+    "jsonwebtoken": "^9.0.2",
     "jsvectormap": "^1.5.3",
     "lucide-react": "^0.461.0",
     "mongoose": "^8.8.3",
@@ -35,6 +37,8 @@
     "zustand": "^5.0.1"
   },
   "devDependencies": {
+    "@types/bcryptjs": "^2.4.6",
+    "@types/jsonwebtoken": "^9.0.7",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
