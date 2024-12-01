@@ -14,5 +14,11 @@ declare global {
     addPortfolio: (payload: any) => Promise<void>;
     reset: () => void;
   };
+  type AuthStateStore = {
+    accessToken: string | null;
+    login: (payload: any) => Promise<void>;
+    logout: () => void;
+    reset: () => void;
+  };
 }
 export {};

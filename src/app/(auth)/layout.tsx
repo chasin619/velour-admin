@@ -5,6 +5,7 @@ import "@/css/satoshi.css";
 import "@/css/style.css";
 import React, { useEffect, useState } from "react";
 import Loader from "@/components/common/Loader";
+import { Toaster } from "react-hot-toast";
 
 export default function RootLayout({
   children,
@@ -21,6 +22,7 @@ export default function RootLayout({
     <html lang="en">
       <body suppressHydrationWarning={true}>
         {loading ? <Loader /> : children}
+        <Toaster position="top-center" reverseOrder={false} />
       </body>
     </html>
   );

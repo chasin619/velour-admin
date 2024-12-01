@@ -1,14 +1,18 @@
 "use client";
-import React, { useState } from "react";
-import Link from "next/link";
+
+import React from "react";
+import useLogin from "./Signin/action";
 
 export default function SigninWithPassword() {
-  const [data, setData] = useState({
-    remember: false,
-  });
+  const { form, onSubmit } = useLogin();
+  const {
+    handleSubmit,
+    register,
+    formState: { errors },
+  } = form;
 
   return (
-    <form>
+    <form onSubmit={handleSubmit(onSubmit)}>
       <div className="mb-4">
         <label
           htmlFor="email"
@@ -18,10 +22,11 @@ export default function SigninWithPassword() {
         </label>
         <div className="relative">
           <input
+            {...register("email")}
             type="email"
             placeholder="Enter your email"
             name="email"
-            className="w-full rounded-lg border border-stroke bg-transparent py-[15px] pl-6 pr-11 font-medium text-dark outline-none focus:border-primary focus-visible:shadow-none dark:border-dark-3 dark:bg-dark-2 dark:text-white dark:focus:border-primary"
+            className={`w-full rounded-lg border border-stroke bg-transparent py-[15px] pl-6 pr-11 font-medium text-dark outline-none focus:border-primary focus-visible:shadow-none dark:border-dark-3 dark:bg-dark-2 dark:text-white dark:focus:border-primary ${errors.email ? "border-red-500" : ""}`}
           />
 
           <span className="absolute right-4.5 top-1/2 -translate-y-1/2">
@@ -41,6 +46,9 @@ export default function SigninWithPassword() {
               />
             </svg>
           </span>
+          {errors.email?.message && (
+            <p className="mt-1 text-sm text-red-500">{errors.email?.message}</p>
+          )}
         </div>
       </div>
 
@@ -53,11 +61,12 @@ export default function SigninWithPassword() {
         </label>
         <div className="relative">
           <input
+            {...register("password")}
             type="password"
             name="password"
             placeholder="Enter your password"
             autoComplete="password"
-            className="w-full rounded-lg border border-stroke bg-transparent py-[15px] pl-6 pr-11 font-medium text-dark outline-none focus:border-primary focus-visible:shadow-none dark:border-dark-3 dark:bg-dark-2 dark:text-white dark:focus:border-primary"
+            className={`w-full rounded-lg border border-stroke bg-transparent py-[15px] pl-6 pr-11 font-medium text-dark outline-none focus:border-primary focus-visible:shadow-none dark:border-dark-3 dark:bg-dark-2 dark:text-white dark:focus:border-primary ${errors.password ? "border-red-500" : ""}}`}
           />
 
           <span className="absolute right-4.5 top-1/2 -translate-y-1/2">
@@ -99,7 +108,7 @@ export default function SigninWithPassword() {
           />
           <span
             className={`mr-2.5 inline-flex h-5.5 w-5.5 items-center justify-center rounded-md border border-stroke bg-white text-white text-opacity-0 peer-checked:border-primary peer-checked:bg-primary peer-checked:text-opacity-100 dark:border-stroke-dark dark:bg-white/5 ${
-              data.remember ? "bg-primary" : ""
+              true ? "bg-primary" : ""
             }`}
           >
             <svg
@@ -119,13 +128,6 @@ export default function SigninWithPassword() {
           </span>
           Remember me
         </label>
-
-        <Link
-          href="/auth/forgot-password"
-          className="select-none font-satoshi text-base font-medium text-dark underline duration-300 hover:text-primary dark:text-white dark:hover:text-primary"
-        >
-          Forgot Password?
-        </Link>
       </div>
 
       <div className="mb-4.5">
