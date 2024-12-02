@@ -10,7 +10,7 @@ interface LoginRequestBody {
   password: string;
 }
 
-const jwt_secret = process.env.JWT_SECRET || "";
+const jwt_secret = process.env.NEXT_PUBLIC_JWT_SECRET || "";
 
 export async function POST(req: Request) {
   try {
