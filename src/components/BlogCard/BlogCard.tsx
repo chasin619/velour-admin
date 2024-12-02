@@ -18,6 +18,7 @@ const BlogCard: React.FC<BlogCardProps> = ({ blogs }) => {
             src={blog.image}
             alt={blog.title}
             layout="responsive"
+            loading="lazy"
             width={200}
             height={120}
             className="rounded-lg"

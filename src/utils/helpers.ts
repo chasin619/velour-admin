@@ -36,7 +36,7 @@ export const uploadToS3 = async (
   };
 
   if (Array.isArray(files)) {
-    const uploadPromises = files.map((file) => uploadSingleFile(file || file.file));
+    const uploadPromises = files.map((file) => uploadSingleFile(file.file));
     const results = await Promise.all(uploadPromises);
     return results;
   } else {

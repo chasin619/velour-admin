@@ -4,7 +4,7 @@ import { uploadToS3 } from "@/utils/helpers";
 import { BucketFolderName } from "@/enum/bucket";
 
 const useReview = () => {
-  const { reviews, addReview, getReviews } = useHomeStore();
+  const { reviews, addReview, getReviews, setLoading } = useHomeStore();
   const [isVisible, setIsVisible] = useState<boolean>(false);
 
   useEffect(() => {
@@ -13,11 +13,14 @@ const useReview = () => {
 
   const handleSubmit = async (payload: File | null) => {
     try {
+      setLoading(true);
       const image = await uploadToS3(payload, BucketFolderName.Review);
       await addReview({ image });
       setIsVisible(false);
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoading(false);
     }
   };
 

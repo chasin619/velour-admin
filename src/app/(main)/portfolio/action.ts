@@ -7,7 +7,8 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { PortfolioSchema } from "./schema";
 
 const usePortfolio = () => {
-  const { portfolios, addPortfolio, getPortfolios } = useHomeStore();
+  const { portfolios, addPortfolio, getPortfolios, setLoading } =
+    useHomeStore();
   const [isVisible, setIsVisible] = useState<boolean>(false);
 
   const form = useForm({
@@ -24,6 +25,7 @@ const usePortfolio = () => {
 
   const onSubmit = async (payload: any) => {
     try {
+      setLoading(true);
       const images = await uploadToS3(
         payload.images,
         BucketFolderName.Portfolio,
@@ -33,10 +35,12 @@ const usePortfolio = () => {
       closeModal();
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoading(false);
     }
   };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = (e: React.ChangeEvent) => {
     const files = e.target.files ? Array.from(e.target.files) : [];
     if (files.length === 0) return;
 
