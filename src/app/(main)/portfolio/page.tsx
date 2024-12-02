@@ -7,6 +7,7 @@ import { Controller } from "react-hook-form";
 import { Button } from "@/components/Button";
 import Modal from "@/components/Modal";
 import { Input } from "@/components/Input";
+import { Slider } from "@/components/slider";
 import usePortfolio from "./action";
 
 const Portfolio = () => {
@@ -124,12 +125,21 @@ const Portfolio = () => {
             key={index}
             className="rounded-[10px] bg-white p-4 shadow-1 dark:bg-gray-dark"
           >
-            <Image
-              src={item.images?.[0]}
-              alt={item.title}
-              width={200}
-              height={120}
-              className="rounded-lg w-full h-40 lg:h-52 object-cover"
+            <Slider
+              data={item.images}
+              slidesPerView={1}
+              autoplay={false}
+              renderItem={(item, index) => {
+                return (
+                  <Image
+                    src={item}
+                    alt={`Portfolio Image ${index}`}
+                    width={200}
+                    height={120}
+                    className="h-40 w-full rounded-lg object-cover lg:h-52"
+                  />
+                );
+              }}
             />
             <h4 className="mb-1.5 mt-4 text-heading-6 font-bold text-dark dark:text-white">
               {item.title}

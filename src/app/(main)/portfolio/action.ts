@@ -59,7 +59,6 @@ const usePortfolio = () => {
         if (visuals.length === files.length) {
           const updatedVisuals = [...images, ...visuals];
           form.setValue("images", updatedVisuals);
-          console.log("Updated visuals:", updatedVisuals);
         }
       };
 
