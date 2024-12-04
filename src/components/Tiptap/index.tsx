@@ -16,7 +16,7 @@ const Tiptap: React.FC<TiptapProps> = ({ onChange, content }) => {
     editorProps: {
       attributes: {
         class:
-          "w-full rounded-[7px] border-[1.5px] border-stroke bg-white py-2.5 px-4.5 text-dark focus:border-primary focus-visible:outline-none dark:border-dark-3 dark:bg-dark-2 dark:text-white dark:focus:border-primary h-52",
+          "w-full overflow-scroll rounded-[7px] border-[1.5px] border-stroke bg-white py-2.5 px-4.5 text-dark focus:border-primary focus-visible:outline-none dark:border-dark-3 dark:bg-dark-2 dark:text-white dark:focus:border-primary h-52",
       },
     },
     onUpdate: ({ editor }) => {
