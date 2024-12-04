@@ -7,6 +7,9 @@ interface ReviewRequestBody {
   image: string;
 }
 
+export const maxDuration = 15000;
+export const dynamic = 'force-dynamic';
+
 export async function POST(req: Request) {
   try {
     const body: ReviewRequestBody = await req.json();

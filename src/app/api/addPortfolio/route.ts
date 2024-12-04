@@ -8,6 +8,9 @@ interface PortfolioRequestBody {
   images: any[];
 }
 
+export const maxDuration = 15000;
+export const dynamic = 'force-dynamic';
+
 export async function POST(req: Request) {
   try {
     const body: PortfolioRequestBody = await req.json();

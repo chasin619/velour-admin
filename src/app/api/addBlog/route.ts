@@ -10,6 +10,9 @@ interface BlogRequestBody {
   author: string;
 }
 
+export const maxDuration = 15000;
+export const dynamic = 'force-dynamic';
+
 export async function POST(req: Request) {
   try {
     const body: BlogRequestBody = await req.json();

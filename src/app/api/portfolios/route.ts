@@ -8,6 +8,9 @@ interface PortfolioDocument {
   images: any[];
 }
 
+export const maxDuration = 15000;
+export const dynamic = 'force-dynamic';
+
 export async function GET(): Promise<NextResponse> {
   try {
     await dbConnect();
