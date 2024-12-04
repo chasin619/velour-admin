@@ -54,7 +54,7 @@ const Review = () => {
           <input
             type="file"
             id="image"
-            accept="image/png, image/jpg, image/jpeg"
+            accept="image/*"
             className="absolute inset-0 z-50 m-0 h-full w-full cursor-pointer p-0 opacity-0 outline-none"
             onChange={(e) => {
               const file = e.target.files?.[0];
