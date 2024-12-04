@@ -17,11 +17,11 @@ const BlogCard: React.FC<BlogCardProps> = ({ blogs }) => {
           <Image
             src={blog.image}
             alt={blog.title}
-            layout="responsive"
             loading="lazy"
             width={200}
             height={120}
-            className="rounded-lg"
+            style={{ objectPosition: 'top' }}
+            className="rounded-lg !h-[250px] w-full object-cover"
           />
           <div className="m-2 flex flex-col items-start justify-between gap-4">
             <h4 className="mb-1.5 mt-4 text-heading-6 font-bold text-dark dark:text-white">
