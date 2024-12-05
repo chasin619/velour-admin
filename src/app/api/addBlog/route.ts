@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import dbConnect from "@/libs/db";
+import slugify from "slugify";
 
 import Blog from "../models/blog";
 
@@ -17,10 +18,11 @@ export async function POST(req: Request) {
   try {
     const body: BlogRequestBody = await req.json();
     const { title, content, image, author } = body;
+    const slug = slugify(title, { lower: true, strict: true });
 
     await dbConnect();
 
-    const blog = await Blog.create({ title, content, image, author });
+    const blog = await Blog.create({ title, content, image, author, slug });
 
     return NextResponse.json(
       { message: "Blog added successfully", blog },
