@@ -7,7 +7,7 @@ const nextConfig = {
     ignoreBuildErrors: true,
   },
   images: {
-    domains: ["velour-web.s3.amazonaws.com"],
+    domains: ["chicflowers.s3.amazonaws.com", "velour-web.s3.amazonaws.com"],
   },
   webpack(config) {
     config.module.rules.push({

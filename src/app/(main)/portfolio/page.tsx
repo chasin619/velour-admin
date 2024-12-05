@@ -66,7 +66,7 @@ const Portfolio = () => {
                   <input
                     type="file"
                     id="image"
-                    accept="image/png, image/jpg, image/jpeg"
+                    accept="image/*"
                     className="absolute inset-0 z-50 m-0 h-full w-full cursor-pointer p-0 opacity-0 outline-none"
                     multiple
                     onChange={(e) => handleFileChange(e)}
@@ -119,7 +119,7 @@ const Portfolio = () => {
           />
         </Modal>
       </form>
-      <div className="mt-8 grid grid-cols-1 gap-4 md:grid-cols-3 md:gap-6 xl:grid-cols-3 2xl:gap-7.5">
+      <div className="mt-8 grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-3 2xl:gap-7.5">
         {portfolios.map((item, index) => (
           <div
             key={index}
@@ -134,9 +134,10 @@ const Portfolio = () => {
                   <Image
                     src={item}
                     alt={`Portfolio Image ${index}`}
+                    loading="lazy"
                     width={200}
                     height={120}
-                    className="h-40 w-full rounded-lg object-cover lg:h-52"
+                    className="h-48 w-full rounded-lg object-cover lg:h-56"
                   />
                 );
               }}
