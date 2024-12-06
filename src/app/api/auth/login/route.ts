@@ -3,7 +3,7 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
 import dbConnect from "@/libs/db";
-import User from "../models/user";
+import User from "../../models/user";
 
 interface LoginRequestBody {
   email: string;

@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import dbConnect from "@/libs/db";
 import slugify from "slugify";
 
-import Blog from "../models/blog";
+import Blog from "../../models/blog";
 
 interface BlogRequestBody {
   title: string;

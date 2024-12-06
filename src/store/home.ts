@@ -27,7 +27,7 @@ const useHomeStore = create<HomeStoreState>((set, get) => ({
   },
   getAllBlogs: async () => {
     try {
-      const response = await axios.get("/api/blogs");
+      const response = await axios.get("/api/blog/get-blogs");
       set({ blogs: response.data.blogs });
     } catch (error: any) {
       console.log(error.message);
@@ -36,7 +36,7 @@ const useHomeStore = create<HomeStoreState>((set, get) => ({
   addBlog: async (payload) => {
     const { blogs } = get();
     try {
-      const response = await axios.post("/api/addBlog", payload);
+      const response = await axios.post("/api/blog/add-blog", payload);
       set({ blogs: [...blogs, response.data.blog] });
       toast.success(response.data.message);
     } catch (error: any) {
@@ -45,7 +45,7 @@ const useHomeStore = create<HomeStoreState>((set, get) => ({
   },
   getReviews: async () => {
     try {
-      const response = await axios.get("/api/reviews");
+      const response = await axios.get("/api/review/get-reviews");
       set({ reviews: response.data.reviews });
     } catch (error: any) {
       console.log(error.message);
@@ -54,7 +54,7 @@ const useHomeStore = create<HomeStoreState>((set, get) => ({
   addReview: async (payload) => {
     const { reviews } = get();
     try {
-      const response = await axios.post("/api/addReview", payload);
+      const response = await axios.post("/api/review/add-review", payload);
       set({ reviews: [...reviews, response.data.review] });
       toast.success(response.data.message);
     } catch (error: any) {
@@ -63,7 +63,7 @@ const useHomeStore = create<HomeStoreState>((set, get) => ({
   },
   getPortfolios: async () => {
     try {
-      const response = await axios.get("/api/portfolios");
+      const response = await axios.get("/api/portfolio/get-portfolios");
       set({ portfolios: response.data.portfolios });
     } catch (error: any) {
       console.log(error.message);
@@ -72,7 +72,7 @@ const useHomeStore = create<HomeStoreState>((set, get) => ({
   addPortfolio: async (payload) => {
     const { portfolios } = get();
     try {
-      const response = await axios.post("/api/addPortfolio", payload);
+      const response = await axios.post("/api/portfolio/add-portfolio", payload);
       set({ portfolios: [...portfolios, response.data.portfolio] });
       toast.success(response.data.message);
     } catch (error: any) {

@@ -14,7 +14,7 @@ const useAuthStore = create(
       ...initialValues,
       login: async (payload) => {
         try {
-          const response = await axios.post("/api/login", payload);
+          const response = await axios.post("/api/auth/login", payload);
           set({ accessToken: response.data.accessToken });
           toast.success("Logged in successfully!");
         } catch (error: any) {

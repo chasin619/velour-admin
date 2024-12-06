@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 
 import dbConnect from "@/libs/db";
-import Review from "../models/review";
+import Review from "../../models/review";
 
 interface ReviewDocument {
   _id: string;

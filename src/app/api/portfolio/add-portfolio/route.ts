@@ -1,10 +1,11 @@
 import { NextResponse } from "next/server";
 import dbConnect from "@/libs/db";
 
-import Review from "../models/review";
+import Portfolio from "../../models/portfolio";
 
-interface ReviewRequestBody {
-  image: string;
+interface PortfolioRequestBody {
+  title: string;
+  images: any[];
 }
 
 export const maxDuration = 60;
@@ -12,15 +13,15 @@ export const dynamic = 'force-dynamic';
 
 export async function POST(req: Request) {
   try {
-    const body: ReviewRequestBody = await req.json();
-    const { image } = body;
+    const body: PortfolioRequestBody = await req.json();
+    const { title, images } = body;
 
     await dbConnect();
 
-    const review = await Review.create({ image });
+    const portfolio = await Portfolio.create({ title, images });
 
     return NextResponse.json(
-      { message: "Review added successfully", review },
+      { message: "Portfolio added successfully", portfolio },
       { status: 200 },
     );
   } catch (error: any) {

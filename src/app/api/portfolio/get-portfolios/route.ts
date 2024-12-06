@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import Portfolio from "../models/portfolio";
+import Portfolio from "../../models/portfolio";
 import dbConnect from "@/libs/db";
 
 interface PortfolioDocument {

@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import Blog from "../models/blog";
+import Blog from "../../models/blog";
 import dbConnect from "@/libs/db";
 
 interface BlogDocument {
