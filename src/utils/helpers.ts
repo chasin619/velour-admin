@@ -43,3 +43,50 @@ export const uploadToS3 = async (
     return await uploadSingleFile(files);
   }
 };
+
+export const deleteFromS3 = async (
+  keys: string | string[],
+  folderName: string
+): Promise<boolean> => {
+  AWS.config.update({
+    accessKeyId: process.env.NEXT_PUBLIC_AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.NEXT_PUBLIC_AWS_SECRET_ACCESS_KEY,
+    region: process.env.NEXT_PUBLIC_AWS_REGION,
+  });
+
+  const s3 = new AWS.S3();
+
+  if (Array.isArray(keys)) {
+    const objectsToDelete = keys.map((key) => ({ Key: `${folderName}/${key}` }));
+
+    const params: AWS.S3.DeleteObjectsRequest = {
+      Bucket: process.env.NEXT_PUBLIC_AWS_S3_BUCKET_NAME!,
+      Delete: {
+        Objects: objectsToDelete,
+        Quiet: false,
+      },
+    };
+
+    const result = await s3.deleteObjects(params).promise();
+
+    if (result.Errors && result.Errors.length > 0) {
+      console.error("Error deleting files:", result.Errors);
+      return false;
+    }
+
+    return true;
+  } else {
+    const params: AWS.S3.DeleteObjectRequest = {
+      Bucket: process.env.NEXT_PUBLIC_AWS_S3_BUCKET_NAME!,
+      Key: `${folderName}/${keys}`,
+    };
+
+    try {
+      await s3.deleteObject(params).promise();
+      return true;
+    } catch (error) {
+      console.error("Error deleting file:", error);
+      return false;
+    }
+  }
+};
