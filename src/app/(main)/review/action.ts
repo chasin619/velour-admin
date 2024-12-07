@@ -1,11 +1,15 @@
 import { useEffect, useState } from "react";
 import useHomeStore from "@/store/home";
-import { uploadToS3 } from "@/utils/helpers";
+import { deleteFromS3, uploadToS3 } from "@/utils/helpers";
 import { BucketFolderName } from "@/enum/bucket";
 
 const useReview = () => {
-  const { reviews, addReview, getReviews, setLoading } = useHomeStore();
+  const { reviews, addReview, getReviews, setLoading, deleteReview } =
+    useHomeStore();
   const [isVisible, setIsVisible] = useState<boolean>(false);
+  const [isDeleteModalVisible, setIsDeleteModalVisible] =
+    useState<boolean>(false);
+  const [selectedReview, setSelectedReview] = useState<any>();
 
   useEffect(() => {
     getReviews();
@@ -24,6 +28,25 @@ const useReview = () => {
     }
   };
 
+  const openDeleteModal = (review: any) => {
+    setIsDeleteModalVisible(true);
+    setSelectedReview(review);
+  };
+
+  const closeDeleteModal = () => {
+    setIsDeleteModalVisible(false);
+  };
+
+  const handleDelete = async () => {
+    const res = await deleteFromS3(
+      selectedReview.image,
+      BucketFolderName.Review,
+    );
+    if (res) {
+      await deleteReview(selectedReview);
+    }
+  };
+
   const closeModal = () => setIsVisible(false);
 
   const openModal = () => setIsVisible(true);
@@ -34,6 +57,11 @@ const useReview = () => {
     reviews,
     isVisible,
     openModal,
+    isDeleteModalVisible,
+    openDeleteModal,
+    closeDeleteModal,
+    handleDelete,
+    selectedReview,
   };
 };
 

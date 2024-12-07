@@ -4,17 +4,27 @@ import React, { useState } from "react";
 import Image from "next/image";
 import { Button } from "@/components/Button";
 import Modal from "@/components/Modal";
+import { DeleteSvg } from "@/assets/svgs";
 import useReview from "./action";
 
 const Review = () => {
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
-  const { reviews, closeModal, isVisible, openModal, handleSubmit } =
-    useReview();
+  const {
+    reviews,
+    closeModal,
+    isVisible,
+    openModal,
+    handleSubmit,
+    isDeleteModalVisible,
+    closeDeleteModal,
+    openDeleteModal,
+    handleDelete,
+  } = useReview();
 
   return (
     <>
       <div className="items-cener flex justify-between">
-        <h2 className="text-[32px] font-bold leading-[30px] text-dark dark:text-white ">
+        <h2 className="text-[32px] font-bold leading-[30px] text-dark dark:text-white">
           Review
         </h2>
         <Button
@@ -27,7 +37,7 @@ const Review = () => {
         {reviews.map((review, index) => (
           <div
             key={index}
-            className="rounded-[10px] bg-white p-2 shadow-1 dark:bg-gray-dark"
+            className="group relative rounded-[10px] bg-white p-2 shadow-1 dark:bg-gray-dark"
           >
             <Image
               src={review.image}
@@ -35,8 +45,14 @@ const Review = () => {
               width={200}
               height={120}
               loading="lazy"
-              className="rounded-lg w-full h-48 lg:h-56 object-cover"
+              className="h-48 w-full rounded-lg object-cover lg:h-56"
             />
+            <div
+              className="absolute right-6 top-6 flex h-9 w-9 cursor-pointer items-center justify-center rounded-md bg-white p-2 opacity-0 transition-opacity duration-300 group-hover:opacity-100 dark:bg-gray-dark"
+              onClick={() => openDeleteModal(review)}
+            >
+              <DeleteSvg className="h-full w-full text-red" />
+            </div>
           </div>
         ))}
       </div>
@@ -85,6 +101,14 @@ const Review = () => {
             </p>
           </div>
         </div>
+      </Modal>
+      <Modal
+        title="Delete Review"
+        visible={isDeleteModalVisible}
+        onRequestClose={closeDeleteModal}
+        onConfirm={handleDelete}
+      >
+        Are you sure you want to delete this review?
       </Modal>
     </>
   );

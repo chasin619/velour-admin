@@ -11,6 +11,7 @@ declare global {
     deleteBlog: (id: string) => Promise<void>;
     getReviews: () => Promise<void>;
     addReview: (payload: any) => Promise<void>;
+    deleteReview: (id: string) => Promise<void>;
     getPortfolios: () => Promise<void>;
     addPortfolio: (payload: any) => Promise<void>;
     reset: () => void;

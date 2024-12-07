@@ -77,6 +77,22 @@ const useHomeStore = create<HomeStoreState>((set, get) => ({
       console.log(error.message);
     }
   },
+  deleteReview: async (id) => {
+    const { reviews, setLoading } = get();
+    setLoading(true);
+    try {
+      const response = await axios.delete("/api/review/delete-review", {
+        data: { id },
+      });
+      set({ reviews: reviews.filter((review) => review.id !== id) });
+      toast.success(response.data.message);
+    } catch (error: any) {
+      console.error("Error deleting Review:", error.message);
+      toast.error("Failed to delete the Review");
+    } finally {
+      setLoading(false);
+    }
+  },
   getPortfolios: async () => {
     try {
       const response = await axios.get("/api/portfolio/get-portfolios");

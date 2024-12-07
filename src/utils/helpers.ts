@@ -44,9 +44,14 @@ export const uploadToS3 = async (
   }
 };
 
+export const extractNumberFromUrl = (url: string): string | null => {
+  const match = url.match(/\/(\d+)$/);
+  return match ? match[1] : null;
+};
+
 export const deleteFromS3 = async (
   keys: string | string[],
-  folderName: string
+  folderName: string,
 ): Promise<boolean> => {
   AWS.config.update({
     accessKeyId: process.env.NEXT_PUBLIC_AWS_ACCESS_KEY_ID,
@@ -57,7 +62,10 @@ export const deleteFromS3 = async (
   const s3 = new AWS.S3();
 
   if (Array.isArray(keys)) {
-    const objectsToDelete = keys.map((key) => ({ Key: `${folderName}/${key}` }));
+    const objectsToDelete = keys.map((key) => {
+      const extractedKey = extractNumberFromUrl(key);
+      return { Key: `${folderName}/${extractedKey}` };
+    });
 
     const params: AWS.S3.DeleteObjectsRequest = {
       Bucket: process.env.NEXT_PUBLIC_AWS_S3_BUCKET_NAME!,
@@ -76,9 +84,11 @@ export const deleteFromS3 = async (
 
     return true;
   } else {
+    const extractedKey = extractNumberFromUrl(keys);
+
     const params: AWS.S3.DeleteObjectRequest = {
       Bucket: process.env.NEXT_PUBLIC_AWS_S3_BUCKET_NAME!,
-      Key: `${folderName}/${keys}`,
+      Key: `${folderName}/${extractedKey}`,
     };
 
     try {
