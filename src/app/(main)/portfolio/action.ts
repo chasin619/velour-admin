@@ -1,15 +1,23 @@
 import { useEffect, useState } from "react";
 import useHomeStore from "@/store/home";
-import { uploadToS3 } from "@/utils/helpers";
+import { deleteFromS3, uploadToS3 } from "@/utils/helpers";
 import { BucketFolderName } from "@/enum/bucket";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { PortfolioSchema } from "./schema";
 
 const usePortfolio = () => {
-  const { portfolios, addPortfolio, getPortfolios, setLoading } =
-    useHomeStore();
+  const {
+    portfolios,
+    addPortfolio,
+    getPortfolios,
+    setLoading,
+    deletePortfolio,
+  } = useHomeStore();
   const [isVisible, setIsVisible] = useState<boolean>(false);
+  const [selectedPortfolio, setSelectedPortfolio] = useState<any>({});
+  const [isDeleteModalVisible, setIsDeleteModalVisible] =
+    useState<boolean>(false);
 
   const form = useForm({
     resolver: yupResolver(PortfolioSchema),
@@ -66,9 +74,28 @@ const usePortfolio = () => {
     });
   };
 
+  const handleDelete = async () => {
+    const res = await deleteFromS3(
+      selectedPortfolio.images,
+      BucketFolderName.Portfolio,
+    );
+    if (res) {
+      await deletePortfolio(selectedPortfolio._id);
+    }
+  };
+
   const closeModal = () => setIsVisible(false);
 
   const openModal = () => setIsVisible(true);
+
+  const openDeleteModal = (review: any) => {
+    setIsDeleteModalVisible(true);
+    setSelectedPortfolio(review);
+  };
+
+  const closeDeleteModal = () => {
+    setIsDeleteModalVisible(false);
+  };
 
   return {
     onSubmit,
@@ -78,6 +105,10 @@ const usePortfolio = () => {
     form,
     openModal,
     handleFileChange,
+    handleDelete,
+    isDeleteModalVisible,
+    openDeleteModal,
+    closeDeleteModal,
   };
 };
 

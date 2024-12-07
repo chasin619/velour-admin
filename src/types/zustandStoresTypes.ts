@@ -14,6 +14,7 @@ declare global {
     deleteReview: (id: string) => Promise<void>;
     getPortfolios: () => Promise<void>;
     addPortfolio: (payload: any) => Promise<void>;
+    deletePortfolio: (id: string) => Promise<void>;
     reset: () => void;
   };
   type AuthStateStore = {

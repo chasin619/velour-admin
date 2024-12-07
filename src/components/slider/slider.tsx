@@ -32,7 +32,7 @@ const Slider = <T,>({
     <div className="overflow relative max-h-80 w-full">
       {showControls && (
         <button
-          className="absolute left-2 top-1/2 z-10 flex -translate-y-1/2 transform items-center justify-center rounded-full p-3 shadow-lg transition-transform bg-white dark:border-stroke-dark dark:bg-gray-dark"
+          className="absolute left-2 top-1/2 z-10 flex -translate-y-1/2 transform items-center justify-center rounded-full p-3 shadow-lg transition-all bg-white dark:border-stroke-dark dark:bg-gray-dark opacity-0 duration-300 group-hover:opacity-100"
           onClick={() => swiperRef.current?.slidePrev()}
         >
           <LeftArrowSvg className="text-dark-4 dark:text-gray-5" />
@@ -57,7 +57,7 @@ const Slider = <T,>({
       </Swiper>
       {showControls && (
         <button
-          className="absolute right-2 top-1/2 z-10 flex -translate-y-1/2 transform items-center justify-center rounded-full p-3 shadow-lg transition-transform bg-white dark:border-stroke-dark dark:bg-gray-dark"
+          className="absolute right-2 top-1/2 z-10 flex -translate-y-1/2 transform items-center justify-center rounded-full p-3 shadow-lg transition-all bg-white opacity-0 dark:border-stroke-dark dark:bg-gray-dark duration-300 group-hover:opacity-100"
           onClick={() => swiperRef.current?.slideNext()}
         >
           <RightArrowSvg className="text-dark-4 dark:text-gray-5" />

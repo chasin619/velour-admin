@@ -43,7 +43,7 @@ const useReview = () => {
       BucketFolderName.Review,
     );
     if (res) {
-      await deleteReview(selectedReview);
+      await deleteReview(selectedReview._id);
     }
   };
 

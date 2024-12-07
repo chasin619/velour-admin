@@ -9,6 +9,7 @@ import Modal from "@/components/Modal";
 import { Input } from "@/components/Input";
 import { Slider } from "@/components/slider";
 import usePortfolio from "./action";
+import { DeleteSvg } from "@/assets/svgs";
 
 const Portfolio = () => {
   const {
@@ -19,6 +20,10 @@ const Portfolio = () => {
     form,
     handleFileChange,
     portfolios,
+    isDeleteModalVisible,
+    handleDelete,
+    closeDeleteModal,
+    openDeleteModal,
   } = usePortfolio();
   const {
     register,
@@ -123,31 +128,44 @@ const Portfolio = () => {
         {portfolios.map((item, index) => (
           <div
             key={index}
-            className="rounded-[10px] bg-white p-4 shadow-1 dark:bg-gray-dark"
+            className="group relative rounded-[10px] bg-white p-4 shadow-1 dark:bg-gray-dark"
           >
             <Slider
               data={item.images}
               slidesPerView={1}
               autoplay={false}
-              renderItem={(item, index) => {
-                return (
-                  <Image
-                    src={item}
-                    alt={`Portfolio Image ${index}`}
-                    loading="lazy"
-                    width={200}
-                    height={120}
-                    className="h-48 w-full rounded-lg object-cover lg:h-56"
-                  />
-                );
-              }}
+              renderItem={(image, idx) => (
+                <Image
+                  key={idx}
+                  src={image}
+                  alt={`Portfolio Image ${idx}`}
+                  loading="lazy"
+                  width={200}
+                  height={120}
+                  className="h-48 w-full rounded-lg object-cover lg:h-56"
+                />
+              )}
             />
+            <div
+              className="absolute right-6 top-6 z-10 flex h-9 w-9 cursor-pointer items-center justify-center rounded-md bg-white p-2 opacity-0 transition-opacity duration-300 group-hover:opacity-100 dark:bg-gray-dark"
+              onClick={() => openDeleteModal(item)}
+            >
+              <DeleteSvg className="h-full w-full text-red" />
+            </div>
             <h4 className="mb-1.5 mt-4 text-heading-6 font-bold text-dark dark:text-white">
               {item.title}
             </h4>
           </div>
         ))}
       </div>
+      <Modal
+        title="Delete Portfolio"
+        visible={isDeleteModalVisible}
+        onRequestClose={closeDeleteModal}
+        onConfirm={handleDelete}
+      >
+        Are you sure you want to delete this portfolio?
+      </Modal>
     </>
   );
 };

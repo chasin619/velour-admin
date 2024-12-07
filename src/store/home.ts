@@ -114,6 +114,24 @@ const useHomeStore = create<HomeStoreState>((set, get) => ({
       console.log(error.message);
     }
   },
+  deletePortfolio: async (id) => {
+    const { portfolios, setLoading } = get();
+    setLoading(true);
+    try {
+      const response = await axios.delete("/api/portfolio/delete-portfolio", {
+        data: { id },
+      });
+      set({
+        portfolios: portfolios.filter((portfolio) => portfolio.id !== id),
+      });
+      toast.success(response.data.message);
+    } catch (error: any) {
+      console.error("Error deleting Portfolio:", error.message);
+      toast.error("Failed to delete the Portfolio");
+    } finally {
+      setLoading(false);
+    }
+  },
   reset: () => set({ blogs: [], reviews: [], portfolios: [] }),
 }));
 
