@@ -8,6 +8,7 @@ declare global {
     initilizeHomeStore: () => Promise<void>;
     getAllBlogs: () => Promise<void>;
     addBlog: (payload: any) => Promise<void>;
+    deleteBlog: (id: string) => Promise<void>;
     getReviews: () => Promise<void>;
     addReview: (payload: any) => Promise<void>;
     getPortfolios: () => Promise<void>;

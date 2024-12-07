@@ -2,12 +2,16 @@ import React from "react";
 import Image from "next/image";
 import { formatDate } from "@/utils/helpers";
 import { DeleteSvg, EditSvg } from "@/assets/svgs";
+import useBlogCard from "./action";
+import Modal from "../Modal";
 
 interface BlogCardProps {
   blogs: any[];
 }
 
 const BlogCard: React.FC<BlogCardProps> = ({ blogs }) => {
+  const { handleDelete, closeModal, openModal, visible } = useBlogCard();
+
   return (
     <div className="mt-8 grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-3 2xl:gap-7.5">
       {blogs?.map((blog, index) => (
@@ -24,7 +28,10 @@ const BlogCard: React.FC<BlogCardProps> = ({ blogs }) => {
             style={{ objectPosition: "top" }}
             className="!h-[250px] w-full rounded-lg object-cover"
           />
-          <div className="absolute right-6 top-6 flex h-9 w-9 cursor-pointer items-center justify-center rounded-md bg-white p-2 opacity-0 transition-opacity duration-300 group-hover:opacity-100 dark:bg-gray-dark">
+          <div
+            className="absolute right-6 top-6 flex h-9 w-9 cursor-pointer items-center justify-center rounded-md bg-white p-2 opacity-0 transition-opacity duration-300 group-hover:opacity-100 dark:bg-gray-dark"
+            onClick={() => openModal(blog._id)}
+          >
             <DeleteSvg className="h-full w-full text-red" />
           </div>
           <div className="absolute right-17 top-6 flex h-9 w-9 cursor-pointer items-center justify-center rounded-md bg-white p-2 opacity-0 transition-opacity duration-300 group-hover:opacity-100 dark:bg-gray-dark">
@@ -49,6 +56,14 @@ const BlogCard: React.FC<BlogCardProps> = ({ blogs }) => {
           </div>
         </div>
       ))}
+      <Modal
+        title="Delete Blog"
+        visible={visible}
+        onRequestClose={closeModal}
+        onConfirm={handleDelete}
+      >
+        Are you sure you want to delete this blog?
+      </Modal>
     </div>
   );
 };

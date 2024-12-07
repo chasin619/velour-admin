@@ -43,6 +43,22 @@ const useHomeStore = create<HomeStoreState>((set, get) => ({
       console.log(error.message);
     }
   },
+  deleteBlog: async (id) => {
+    const { blogs, setLoading } = get();
+    setLoading(true);
+    try {
+      const response = await axios.delete("/api/blog/delete-blog", {
+        data: { id },
+      });
+      set({ blogs: blogs.filter((blog) => blog.id !== id) });
+      toast.success(response.data.message);
+    } catch (error: any) {
+      console.error("Error deleting blog:", error.message);
+      toast.error("Failed to delete the blog");
+    } finally {
+      setLoading(false);
+    }
+  },
   getReviews: async () => {
     try {
       const response = await axios.get("/api/review/get-reviews");
@@ -72,7 +88,10 @@ const useHomeStore = create<HomeStoreState>((set, get) => ({
   addPortfolio: async (payload) => {
     const { portfolios } = get();
     try {
-      const response = await axios.post("/api/portfolio/add-portfolio", payload);
+      const response = await axios.post(
+        "/api/portfolio/add-portfolio",
+        payload,
+      );
       set({ portfolios: [...portfolios, response.data.portfolio] });
       toast.success(response.data.message);
     } catch (error: any) {

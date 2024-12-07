@@ -44,7 +44,7 @@ const Modal: React.FC<ModalProps> = ({
         onClick={handleClose}
       ></div>
       <div
-        className={`relative z-10 w-full max-w-md transform rounded-lg bg-white p-6 shadow-lg transition-all dark:bg-gray-800 dark:text-white ${
+        className={`relative z-10 w-full max-w-md transform rounded-lg bg-white p-4 shadow-lg transition-all dark:bg-gray-800 dark:text-white ${
           isClosing ? "scale-90 opacity-0" : "scale-100 opacity-100"
         }`}
       >
