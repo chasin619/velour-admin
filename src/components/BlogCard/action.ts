@@ -1,8 +1,8 @@
 import { useState } from "react";
-import useHomeStore from "@/store/home";
+import useBlogStore from "@/store/blog";
 
 const useBlogCard = () => {
-  const { deleteBlog } = useHomeStore();
+  const { deleteBlog } = useBlogStore();
   const [visible, setVisible] = useState<boolean>(false);
   const [selectedBlogId, setselectedBlogId] = useState<string>("");
 

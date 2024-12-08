@@ -1,19 +1,17 @@
 import { useEffect, useState } from "react";
-import useHomeStore from "@/store/home";
-import { deleteFromS3, uploadToS3 } from "@/utils/helpers";
-import { BucketFolderName } from "@/enum/bucket";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+
+import usePortfolioStore from "@/store/portfolio";
+import useConfigStore from "@/store/config";
+import { deleteFromS3, uploadToS3 } from "@/utils/helpers";
+import { BucketFolderName } from "@/enum/bucket";
 import { PortfolioSchema } from "./schema";
 
 const usePortfolio = () => {
-  const {
-    portfolios,
-    addPortfolio,
-    getPortfolios,
-    setLoading,
-    deletePortfolio,
-  } = useHomeStore();
+  const { portfolios, addPortfolio, getPortfolios, deletePortfolio } =
+    usePortfolioStore();
+  const { setLoading } = useConfigStore();
   const [isVisible, setIsVisible] = useState<boolean>(false);
   const [selectedPortfolio, setSelectedPortfolio] = useState<any>({});
   const [isDeleteModalVisible, setIsDeleteModalVisible] =
@@ -75,12 +73,19 @@ const usePortfolio = () => {
   };
 
   const handleDelete = async () => {
-    const res = await deleteFromS3(
-      selectedPortfolio.images,
-      BucketFolderName.Portfolio,
-    );
-    if (res) {
-      await deletePortfolio(selectedPortfolio._id);
+    setLoading(true);
+    try {
+      const res = await deleteFromS3(
+        selectedPortfolio.images,
+        BucketFolderName.Portfolio,
+      );
+      if (res) {
+        await deletePortfolio(selectedPortfolio._id);
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
     }
   };
 

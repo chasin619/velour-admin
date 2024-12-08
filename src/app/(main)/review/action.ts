@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
-import useHomeStore from "@/store/home";
+import useReviewStore from "@/store/review";
+import useConfigStore from "@/store/config";
 import { deleteFromS3, uploadToS3 } from "@/utils/helpers";
 import { BucketFolderName } from "@/enum/bucket";
 
 const useReview = () => {
-  const { reviews, addReview, getReviews, setLoading, deleteReview } =
-    useHomeStore();
+  const { reviews, addReview, getReviews, deleteReview } = useReviewStore();
+  const { setLoading } = useConfigStore();
   const [isVisible, setIsVisible] = useState<boolean>(false);
   const [isDeleteModalVisible, setIsDeleteModalVisible] =
     useState<boolean>(false);
@@ -38,12 +39,19 @@ const useReview = () => {
   };
 
   const handleDelete = async () => {
-    const res = await deleteFromS3(
-      selectedReview.image,
-      BucketFolderName.Review,
-    );
-    if (res) {
-      await deleteReview(selectedReview._id);
+    setLoading(true);
+    try {
+      const res = await deleteFromS3(
+        selectedReview.image,
+        BucketFolderName.Review,
+      );
+      if (res) {
+        await deleteReview(selectedReview._id);
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
     }
   };
 

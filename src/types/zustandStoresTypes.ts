@@ -1,21 +1,25 @@
 declare global {
-  type HomeStoreState = {
-    blogs: any[];
-    reviews: any[];
-    portfolios: any[];
+  type ConfigStoreState = {
     loading: boolean;
     setLoading: (loading: boolean) => void;
-    initilizeHomeStore: () => Promise<void>;
+  };
+  type BlogStoreState = {
+    blogs: any[];
     getAllBlogs: () => Promise<void>;
     addBlog: (payload: any) => Promise<void>;
     deleteBlog: (id: string) => Promise<void>;
+  };
+  type ReviewStoreState = {
+    reviews: any[];
     getReviews: () => Promise<void>;
     addReview: (payload: any) => Promise<void>;
     deleteReview: (id: string) => Promise<void>;
+  };
+  type PortfolioStoreState = {
+    portfolios: any[];
     getPortfolios: () => Promise<void>;
     addPortfolio: (payload: any) => Promise<void>;
     deletePortfolio: (id: string) => Promise<void>;
-    reset: () => void;
   };
   type AuthStateStore = {
     accessToken: string | null;

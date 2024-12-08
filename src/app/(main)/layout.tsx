@@ -1,4 +1,5 @@
 "use client";
+
 import "jsvectormap/dist/css/jsvectormap.css";
 import "flatpickr/dist/flatpickr.min.css";
 import "@/css/satoshi.css";
@@ -7,14 +8,14 @@ import React, { useEffect } from "react";
 import Loader from "@/components/common/Loader";
 import DefaultLayout from "@/components/Layouts/DefaultLayout";
 import { Toaster } from "react-hot-toast";
-import useHomeStore from "@/store/home";
+import useConfigStore from "@/store/config";
 
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const { loading, setLoading } = useHomeStore();
+  const { loading, setLoading } = useConfigStore();
 
   useEffect(() => {
     setTimeout(() => setLoading(false), 500);

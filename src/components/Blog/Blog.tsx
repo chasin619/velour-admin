@@ -1,15 +1,15 @@
 "use client";
 
 import React, { useEffect } from "react";
+import useBlogStore from "@/store/blog";
 import BlogCard from "../BlogCard/BlogCard";
 import { Button } from "../Button";
-import useHomeStore from "@/store/home";
 
 const Blog: React.FC = () => {
-  const { initilizeHomeStore, blogs } = useHomeStore();
+  const { getAllBlogs, blogs } = useBlogStore();
 
   useEffect(() => {
-    initilizeHomeStore();
+    getAllBlogs();
   }, []);
 
   return (

@@ -2,14 +2,16 @@ import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 
-import useHomeStore from "@/store/home";
+import useBlogStore from "@/store/blog";
+import useConfigStore from "@/store/config";
 import { uploadToS3 } from "@/utils/helpers";
 import { BucketFolderName } from "@/enum/bucket";
 import { BlogFormSchema } from "./schema";
 import { BlogFormData } from ".";
 
 const useBlogForm = () => {
-  const { addBlog, setLoading } = useHomeStore();
+  const { addBlog } = useBlogStore();
+  const { setLoading } = useConfigStore();
   const form = useForm<BlogFormData>({
     resolver: yupResolver(BlogFormSchema),
     defaultValues: {
