@@ -1,5 +1,7 @@
 import React from "react";
 import Image from "next/image";
+import Link from "next/link";
+
 import { formatDate } from "@/utils/helpers";
 import { DeleteSvg, EditSvg } from "@/assets/svgs";
 import useBlogCard from "./action";
@@ -34,9 +36,16 @@ const BlogCard: React.FC<BlogCardProps> = ({ blogs }) => {
           >
             <DeleteSvg className="h-full w-full text-red" />
           </div>
-          <div className="absolute right-17 top-6 flex h-9 w-9 cursor-pointer items-center justify-center rounded-md bg-white p-2 opacity-0 transition-opacity duration-300 group-hover:opacity-100 dark:bg-gray-dark">
-            <EditSvg className="h-full w-full text-dark-4 dark:text-white" />
-          </div>
+          <Link
+            href={{
+              pathname: "/blog/addBlog",
+              query: blog,
+            }}
+          >
+            <div className="absolute right-17 top-6 flex h-9 w-9 cursor-pointer items-center justify-center rounded-md bg-white p-2 opacity-0 transition-opacity duration-300 group-hover:opacity-100 dark:bg-gray-dark">
+              <EditSvg className="h-full w-full text-dark-4 dark:text-white" />
+            </div>
+          </Link>
           <div className="m-2 flex flex-col items-start justify-between gap-4">
             <h4 className="mb-1.5 mt-4 text-heading-6 font-bold text-dark dark:text-white">
               {blog.title}

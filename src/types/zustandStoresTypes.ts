@@ -8,6 +8,7 @@ declare global {
     getAllBlogs: () => Promise<void>;
     addBlog: (payload: any) => Promise<void>;
     deleteBlog: (id: string) => Promise<void>;
+    editBlog: (payload: any) => Promise<void>;
   };
   type ReviewStoreState = {
     reviews: any[];

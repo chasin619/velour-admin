@@ -18,7 +18,7 @@ export interface BlogFormData {
 
 const BlogForm = () => {
   const { push } = useRouter();
-  const { onSubmit, form } = useBlogForm();
+  const { onSubmit, form, isEdit } = useBlogForm();
   const {
     handleSubmit,
     register,
@@ -32,7 +32,7 @@ const BlogForm = () => {
         <div className="rounded-[10px] border border-stroke bg-white shadow-1 dark:border-dark-3 dark:bg-gray-dark dark:shadow-card">
           <div className="border-b border-stroke px-7 py-4 dark:border-dark-3">
             <h3 className="font-medium text-dark dark:text-white">
-              Personal Information
+              Blog Information
             </h3>
           </div>
           <div className="p-7">
@@ -60,9 +60,11 @@ const BlogForm = () => {
                     <div className="flex flex-col items-center justify-center">
                       {field.value ? (
                         <Image
-                          src={URL.createObjectURL(
-                            field.value as unknown as File,
-                          )}
+                          src={
+                            field.value instanceof File
+                              ? URL.createObjectURL(field.value)
+                              : field.value
+                          }
                           alt="Profile Preview"
                           width={300}
                           height={300}
@@ -139,7 +141,7 @@ const BlogForm = () => {
                   className="flex justify-center rounded-[7px] bg-primary px-6 py-[7px] font-medium text-gray-2 hover:bg-opacity-90"
                   type="submit"
                 >
-                  Add
+                  {isEdit ? "Save" : "Add"}
                 </button>
               </div>
             </form>

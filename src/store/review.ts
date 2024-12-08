@@ -36,7 +36,7 @@ const useReviewStore = create<ReviewStoreState>((set, get) => ({
       const response = await axios.delete("/api/review/delete-review", {
         data: { id },
       });
-      set({ reviews: reviews.filter((review) => review.id !== id) });
+      set({ reviews: reviews.filter((review) => review._id !== id) });
       toast.success(response.data.message);
     } catch (error: any) {
       console.error("Error deleting Review:", error.message);

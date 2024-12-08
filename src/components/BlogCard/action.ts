@@ -8,6 +8,7 @@ const useBlogCard = () => {
 
   const handleDelete = async () => {
     await deleteBlog(selectedBlogId);
+    closeModal();
   };
 
   const openModal = (id: string) => {

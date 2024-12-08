@@ -40,7 +40,7 @@ const usePortfolioStore = create<PortfolioStoreState>((set, get) => ({
         data: { id },
       });
       set({
-        portfolios: portfolios.filter((portfolio) => portfolio.id !== id),
+        portfolios: portfolios.filter((portfolio) => portfolio._id !== id),
       });
       toast.success(response.data.message);
     } catch (error: any) {

@@ -36,11 +36,28 @@ const useBlogStore = create<BlogStoreState>((set, get) => ({
       const response = await axios.delete("/api/blog/delete-blog", {
         data: { id },
       });
-      set({ blogs: blogs.filter((blog) => blog.id !== id) });
+      set({ blogs: blogs.filter((blog) => blog._id !== id) });
       toast.success(response.data.message);
     } catch (error: any) {
       console.error("Error deleting blog:", error.message);
       toast.error("Failed to delete the blog");
+    }
+  },
+  editBlog: async (payload) => {
+    const { blogs } = get();
+    try {
+      const response = await axios.put("/api/blog/edit-blog", payload);
+      set({
+        blogs: blogs.map((blog) =>
+          blog.id === payload.id
+            ? { ...blog, ...response.data.updatedBlog }
+            : blog,
+        ),
+      });
+      toast.success(response.data.message);
+    } catch (error: any) {
+      console.error("Error editing blog:", error.message);
+      toast.error("Failed to edit the blog");
     }
   },
   reset: () => set({ blogs: [] }),
