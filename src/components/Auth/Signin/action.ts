@@ -20,9 +20,7 @@ const useLogin = () => {
   const onSubmit = async (payload: any) => {
     try {
       await login(payload);
-      setTimeout(() => {
-        push("/blog");
-      }, 600);
+      push("/blog");
       form.reset();
     } catch (error) {
       console.error("Error:", error);
