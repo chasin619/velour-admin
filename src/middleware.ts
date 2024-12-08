@@ -33,7 +33,6 @@ export function middleware(req: any) {
   if (protectedPages.includes(pathname)) {
     const cookies = parse(req.headers.get("cookie") || "");
     const accessToken = cookies.accessToken;
-    console.log(accessToken);
 
     if (!accessToken) {
       return NextResponse.redirect(new URL("/login", req.url));
