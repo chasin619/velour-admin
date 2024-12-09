@@ -24,7 +24,7 @@ const useReviewStore = create<ReviewStoreState>((set, get) => ({
     const { reviews } = get();
     try {
       const response = await axios.post("/api/review/add-review", payload);
-      set({ reviews: [...reviews, response.data.review] });
+      set({ reviews: [response.data.review, ...reviews] });
       toast.success(response.data.message);
     } catch (error: any) {
       console.log(error.message);

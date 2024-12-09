@@ -13,13 +13,13 @@ interface BlogDocument {
 }
 
 export const maxDuration = 60;
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 
 export async function GET(): Promise<NextResponse> {
   try {
     await dbConnect();
 
-    const blogs: BlogDocument[] = await Blog.find();
+    const blogs: BlogDocument[] = await Blog.find().sort({ createdAt: -1 });
 
     return NextResponse.json({ blogs }, { status: 200 });
   } catch (error: any) {

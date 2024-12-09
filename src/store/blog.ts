@@ -24,7 +24,7 @@ const useBlogStore = create<BlogStoreState>((set, get) => ({
     const { blogs } = get();
     try {
       const response = await axios.post("/api/blog/add-blog", payload);
-      set({ blogs: [...blogs, response.data.blog] });
+      set({ blogs: [response.data.blog, ...blogs] });
       toast.success(response.data.message);
     } catch (error: any) {
       console.log(error.message);

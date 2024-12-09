@@ -27,7 +27,7 @@ const usePortfolioStore = create<PortfolioStoreState>((set, get) => ({
         "/api/portfolio/add-portfolio",
         payload,
       );
-      set({ portfolios: [...portfolios, response.data.portfolio] });
+      set({ portfolios: [response.data.portfolio, ...portfolios] });
       toast.success(response.data.message);
     } catch (error: any) {
       console.log(error.message);

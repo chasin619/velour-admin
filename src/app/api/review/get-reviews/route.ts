@@ -9,13 +9,13 @@ interface ReviewDocument {
 }
 
 export const maxDuration = 60;
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 
 export async function GET(): Promise<NextResponse> {
   try {
     await dbConnect();
 
-    const reviews: ReviewDocument[] = await Review.find();
+    const reviews: ReviewDocument[] = (await Review.find()).reverse();
 
     return NextResponse.json({ reviews }, { status: 200 });
   } catch (error: any) {

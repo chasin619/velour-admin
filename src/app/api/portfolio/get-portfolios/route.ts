@@ -9,13 +9,13 @@ interface PortfolioDocument {
 }
 
 export const maxDuration = 60;
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 
 export async function GET(): Promise<NextResponse> {
   try {
     await dbConnect();
 
-    const portfolios: PortfolioDocument[] = await Portfolio.find();
+    const portfolios: PortfolioDocument[] = (await Portfolio.find()).reverse();
 
     return NextResponse.json({ portfolios }, { status: 200 });
   } catch (error: any) {
