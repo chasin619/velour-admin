@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { getHeaders } from "@/utils/helpers";
 
 interface ReviewStore {
   reviews: any[];
@@ -14,7 +15,10 @@ const useReviewStore = create<ReviewStoreState>((set, get) => ({
   ...initialValues,
   getReviews: async () => {
     try {
-      const response = await axios.get("/api/review/get-reviews");
+      const headers: any = getHeaders();
+      const response = await axios.get("/api/review/get-reviews", {
+        ...headers,
+      });
       set({ reviews: response.data.reviews });
     } catch (error: any) {
       console.log(error.message);
@@ -23,7 +27,10 @@ const useReviewStore = create<ReviewStoreState>((set, get) => ({
   addReview: async (payload) => {
     const { reviews } = get();
     try {
-      const response = await axios.post("/api/review/add-review", payload);
+      const headers: any = getHeaders();
+      const response = await axios.post("/api/review/add-review", payload, {
+        ...headers,
+      });
       set({ reviews: [response.data.review, ...reviews] });
       toast.success(response.data.message);
     } catch (error: any) {

@@ -10,7 +10,7 @@ interface LoginRequestBody {
   password: string;
 }
 
-const jwt_secret = process.env.NEXT_PUBLIC_JWT_SECRET || "";
+const jwt_secret = process.env.JWT_SECRET || "";
 
 export async function POST(req: Request) {
   try {
@@ -46,7 +46,7 @@ export async function POST(req: Request) {
     const accessToken = jwt.sign(data, jwt_secret, { expiresIn: "1h" });
 
     return NextResponse.json(
-      { message: "Login successfully", accessToken },
+      { message: "Login successfully", accessToken, user: existingUser },
       { status: 200 },
     );
   } catch (error: any) {

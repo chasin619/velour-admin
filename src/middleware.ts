@@ -1,43 +1,17 @@
 import { NextResponse } from "next/server";
-import { parse } from "cookie";
+import { authMiddleware } from "./middlewares/auth";
+import { corsMiddleware } from "./middlewares/cors";
+import { protectedRoutesMiddleware } from "./middlewares/protectedRoutes";
 
 export function middleware(req: any) {
-  const { pathname } = req.nextUrl;
+  const authResponse = authMiddleware(req);
+  if (authResponse instanceof NextResponse) return authResponse;
 
-  if (pathname.startsWith("/auth/")) {
-    return NextResponse.next();
-  }
+  const corsResponse = corsMiddleware(req);
+  if (corsResponse instanceof NextResponse) return corsResponse;
 
-  if (pathname.startsWith("/api/")) {
-    const res = NextResponse.next();
-
-    res.headers.set("Access-Control-Allow-Credentials", "true");
-    res.headers.set("Access-Control-Allow-Methods", "*");
-    res.headers.set(
-      "Access-Control-Allow-Headers",
-      "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version",
-    );
-    res.headers.set("Access-Control-Allow-Origin", "*");
-
-    return res;
-  }
-
-  const protectedPages = [
-    "/",
-    "/blog",
-    "/review",
-    "/portfolio",
-    "/blog/addBlog",
-  ];
-
-  if (protectedPages.includes(pathname)) {
-    const cookies = parse(req.headers.get("cookie") || "");
-    const accessToken = cookies.accessToken;
-
-    if (!accessToken) {
-      return NextResponse.redirect(new URL("/login", req.url));
-    }
-  }
+  const protectedResponse = protectedRoutesMiddleware(req);
+  if (protectedResponse instanceof NextResponse) return protectedResponse;
 
   return NextResponse.next();
 }

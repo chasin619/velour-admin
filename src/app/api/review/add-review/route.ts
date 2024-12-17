@@ -8,16 +8,17 @@ interface ReviewRequestBody {
 }
 
 export const maxDuration = 60;
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 
 export async function POST(req: Request) {
   try {
+    const userId = req.headers.get("userId");
     const body: ReviewRequestBody = await req.json();
     const { image } = body;
 
     await dbConnect();
 
-    const review = await Review.create({ image });
+    const review = await Review.create({ image, userId });
 
     return NextResponse.json(
       { message: "Review added successfully", review },

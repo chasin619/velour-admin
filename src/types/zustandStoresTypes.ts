@@ -23,6 +23,7 @@ declare global {
     deletePortfolio: (id: string) => Promise<void>;
   };
   type AuthStateStore = {
+    user: any;
     accessToken: string | null;
     login: (payload: any) => Promise<void>;
     logout: () => void;

@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { getHeaders } from "@/utils/helpers";
 
 interface BlogStore {
   blogs: any[];
@@ -14,7 +15,8 @@ const useBlogStore = create<BlogStoreState>((set, get) => ({
   ...initialValues,
   getAllBlogs: async () => {
     try {
-      const response = await axios.get("/api/blog/get-blogs");
+      const headers: any = getHeaders();
+      const response = await axios.get("/api/blog/get-blogs", { ...headers });
       set({ blogs: response.data.blogs });
     } catch (error: any) {
       console.log(error.message);
@@ -23,7 +25,10 @@ const useBlogStore = create<BlogStoreState>((set, get) => ({
   addBlog: async (payload) => {
     const { blogs } = get();
     try {
-      const response = await axios.post("/api/blog/add-blog", payload);
+      const headers: any = getHeaders();
+      const response = await axios.post("/api/blog/add-blog", payload, {
+        ...headers,
+      });
       set({ blogs: [response.data.blog, ...blogs] });
       toast.success(response.data.message);
     } catch (error: any) {

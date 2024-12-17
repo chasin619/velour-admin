@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { getHeaders } from "@/utils/helpers";
 
 interface PortfolioStore {
   portfolios: any[];
@@ -14,7 +15,10 @@ const usePortfolioStore = create<PortfolioStoreState>((set, get) => ({
   ...initialValues,
   getPortfolios: async () => {
     try {
-      const response = await axios.get("/api/portfolio/get-portfolios");
+      const headers: any = getHeaders();
+      const response = await axios.get("/api/portfolio/get-portfolios", {
+        ...headers,
+      });
       set({ portfolios: response.data.portfolios });
     } catch (error: any) {
       console.log(error.message);
@@ -23,9 +27,11 @@ const usePortfolioStore = create<PortfolioStoreState>((set, get) => ({
   addPortfolio: async (payload) => {
     const { portfolios } = get();
     try {
+      const headers: any = getHeaders();
       const response = await axios.post(
         "/api/portfolio/add-portfolio",
         payload,
+        { ...headers },
       );
       set({ portfolios: [response.data.portfolio, ...portfolios] });
       toast.success(response.data.message);

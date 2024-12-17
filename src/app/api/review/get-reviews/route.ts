@@ -11,11 +11,14 @@ interface ReviewDocument {
 export const maxDuration = 60;
 export const dynamic = "force-dynamic";
 
-export async function GET(): Promise<NextResponse> {
+export async function GET(req: Request): Promise<NextResponse> {
   try {
+    const userId = req.headers.get("userId");
     await dbConnect();
 
-    const reviews: ReviewDocument[] = (await Review.find()).reverse();
+    const reviews: ReviewDocument[] = (
+      await Review.find({ userId: userId })
+    ).reverse();
 
     return NextResponse.json({ reviews }, { status: 200 });
   } catch (error: any) {

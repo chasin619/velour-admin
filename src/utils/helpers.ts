@@ -1,4 +1,5 @@
 import AWS from "aws-sdk";
+import useAuthStore from "@/store/auth";
 
 export const formatDate = (date: string | Date): string => {
   const options: Intl.DateTimeFormatOptions = {
@@ -99,4 +100,14 @@ export const deleteFromS3 = async (
       return false;
     }
   }
+};
+
+export const getHeaders = () => {
+  const userId = useAuthStore.getState().user._id;
+  return {
+    headers: {
+      "Content-Type": "application/json",
+      userId,
+    },
+  };
 };
