@@ -7,6 +7,7 @@ import SidebarItem from "@/components/Sidebar/SidebarItem";
 import ClickOutside from "@/components/ClickOutside";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import { BlogSvg, PortfolioSvg, ReviewSvg } from "@/assets/svgs";
+import useAuthStore from "@/store/auth";
 
 interface SidebarProps {
   sidebarOpen: boolean;
@@ -38,6 +39,7 @@ const menuGroups = [
 
 const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
   const pathname = usePathname();
+  const { currentUser } = useAuthStore();
 
   const [pageName, setPageName] = useLocalStorage("selectedMenu", "dashboard");
 
@@ -54,7 +56,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
         <div className="flex items-center justify-between gap-2 px-6 py-5.5 lg:py-6.5 xl:py-10">
           <Link href="/">
             <h1 className="mb-0.5 text-heading-5 font-bold text-dark dark:text-white">
-              Chic Flowers
+              {currentUser?.portalName}
             </h1>
           </Link>
 

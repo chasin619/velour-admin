@@ -1,3 +1,5 @@
+"use client";
+
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
@@ -8,6 +10,7 @@ import useAuthStore from "@/store/auth";
 
 const DropdownUser = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const { currentUser } = useAuthStore();
   const { logout } = useAuthStore();
   const { push } = useRouter();
 
@@ -38,7 +41,7 @@ const DropdownUser = () => {
         </span>
 
         <span className="flex items-center gap-2 font-medium text-dark dark:text-dark-6">
-          <span className="hidden lg:block">Chic Flowers</span>
+          <span className="hidden lg:block">{currentUser?.fullName}</span>
 
           <svg
             className={`fill-current duration-200 ease-in ${dropdownOpen && "rotate-180"}`}
@@ -82,10 +85,10 @@ const DropdownUser = () => {
 
             <span className="block">
               <span className="block font-medium text-dark dark:text-white">
-                Chic Flowers
+                {currentUser?.fullName}
               </span>
               <span className="block font-medium text-dark-5 dark:text-dark-6">
-                chicflowers@gmail.com
+                {currentUser?.email}
               </span>
             </span>
           </div>

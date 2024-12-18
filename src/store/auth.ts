@@ -7,7 +7,7 @@ import useConfigStore from "./config";
 
 const initialValues: any = {
   accessToken: null,
-  user: null,
+  currentUser: null,
 };
 
 const useAuthStore = create(
@@ -21,7 +21,7 @@ const useAuthStore = create(
           set({ accessToken: response.data.accessToken });
           document.cookie = `accessToken=${response.data.accessToken}; path=/; max-age=${30 * 24 * 60 * 60};`;
           toast.success("Logged in successfully!");
-          set({ user: response.data.user });
+          set({ currentUser: response.data.user });
         } catch (error: any) {
           toast.error(error.response?.data?.error || "Login failed!");
         } finally {
