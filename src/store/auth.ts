@@ -12,7 +12,7 @@ const initialValues: any = {
 
 const useAuthStore = create(
   persist<AuthStateStore>(
-    (set) => ({
+    (set, get) => ({
       ...initialValues,
       login: async (payload) => {
         try {
@@ -29,10 +29,12 @@ const useAuthStore = create(
         }
       },
       logout: () => {
-        set({ accessToken: null });
+        const { reset } = get();
+        reset();
         document.cookie = "accessToken=; path=/; max-age=0;";
         toast.success("Logout successfully!");
       },
+      reset: () => set(initialValues),
     }),
     {
       name: "auth",
