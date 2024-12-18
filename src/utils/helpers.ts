@@ -103,7 +103,7 @@ export const deleteFromS3 = async (
 };
 
 export const getHeaders = () => {
-  const userId = useAuthStore.getState().user._id;
+  const userId = useAuthStore.getState().currentUser?._id;
   return {
     headers: {
       "Content-Type": "application/json",
