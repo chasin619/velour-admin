@@ -10,7 +10,7 @@ export function corsMiddleware(req: any) {
     res.headers.set("Access-Control-Allow-Origin", "*");
     res.headers.set(
       "Access-Control-Allow-Headers",
-      "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version",
+      "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version, userId",
     );
 
     return res;
