@@ -21,6 +21,7 @@ const useBlogForm = () => {
     resolver: yupResolver(BlogFormSchema),
     defaultValues: {
       title: "",
+      meta_description: "",
       content: "",
       image: "",
       author: "",
@@ -35,6 +36,7 @@ const useBlogForm = () => {
         content: searchParams.get("content") || "",
         image: searchParams.get("image") || "",
         author: searchParams.get("author") || "",
+        meta_description: searchParams.get("meta_description") || "",
         id: searchParams.get("_id") || "",
       };
 

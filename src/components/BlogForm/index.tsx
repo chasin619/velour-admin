@@ -11,6 +11,7 @@ import { Input } from "../Input";
 
 export interface BlogFormData {
   title: string;
+  meta_description: string;
   content: string;
   image: string;
   author: string;
@@ -93,10 +94,17 @@ const BlogForm = () => {
               )}
               <Input
                 register={register("title")}
-                label="Blog Title"
+                label="Blog Title / Meta Title"
                 name="title"
                 placeholder="Type your Blog Title here"
                 error={errors.title}
+              />
+              <Input
+                register={register("meta_description")}
+                label="Meta Description"
+                name="meta_description"
+                placeholder="Type your Meta Description here"
+                error={errors.meta_description}
               />
               <Input
                 register={register("author")}

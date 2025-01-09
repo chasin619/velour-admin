@@ -6,6 +6,10 @@ export const BlogFormSchema = Yup.object().shape({
     .min(30, "Minimum 30 words are required in the title")
     .max(100, "Maximum 100 words are required in the title"),
   author: Yup.string().required("Author is required"),
+  meta_description: Yup.string()
+    .required("Meta Description is required")
+    .min(70, "Minimum 70 words are required in the meta description")
+    .max(160, "Maximum 160 words are required in the meta description"),
   image: Yup.mixed().required("Image is required"),
   content: Yup.string()
     .required("Content is required")

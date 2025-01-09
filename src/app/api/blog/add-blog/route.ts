@@ -9,6 +9,7 @@ interface BlogRequestBody {
   content: string;
   image: string;
   author: string;
+  meta_description: string;
 }
 
 export const maxDuration = 60;
@@ -18,7 +19,7 @@ export async function POST(req: Request) {
   try {
     const userId = req.headers.get("userId");
     const body: BlogRequestBody = await req.json();
-    const { title, content, image, author } = body;
+    const { title, content, image, author, meta_description } = body;
     const slug = slugify(title, { lower: true, strict: true });
 
     await dbConnect();
@@ -29,6 +30,7 @@ export async function POST(req: Request) {
       content,
       image,
       author,
+      meta_description,
       slug,
     });
 

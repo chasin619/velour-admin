@@ -17,7 +17,7 @@ export async function PUT(req: Request): Promise<NextResponse> {
     await dbConnect();
 
     const body = await req.json();
-    const { id, title, content, image, author } = body;
+    const { id, title, content, image, author, meta_description } = body;
 
     if (!id) {
       return NextResponse.json(
@@ -28,7 +28,7 @@ export async function PUT(req: Request): Promise<NextResponse> {
 
     const updatedBlog: BlogDocument | null = await Blog.findByIdAndUpdate(
       id,
-      { title, content, image, author, updatedAt: new Date() },
+      { title, content, image, author, meta_description, updatedAt: new Date() },
       { new: true },
     );
 
