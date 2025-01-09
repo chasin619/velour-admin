@@ -21,7 +21,7 @@ const Blog: React.FC = () => {
         <Button
           label="Add Blog"
           customClasses="bg-primary text-white rounded-md p-4 py-3"
-          link="/blog/addBlog"
+          link="/dashboard/blog/addBlog"
         />
       </div>
       <BlogCard blogs={blogs} />

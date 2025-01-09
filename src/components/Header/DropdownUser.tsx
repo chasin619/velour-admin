@@ -16,7 +16,7 @@ const DropdownUser = () => {
 
   const handleLogout = () => {
     logout();
-    push("/login");
+    push("/dashboard/login");
   };
 
   return (

@@ -20,7 +20,7 @@ const useLogin = () => {
   const onSubmit = async (payload: any) => {
     try {
       await login(payload);
-      push("/blog");
+      push("/dashboard/blog");
       form.reset();
     } catch (error) {
       console.error("Error:", error);

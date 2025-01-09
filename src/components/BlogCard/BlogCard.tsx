@@ -38,7 +38,7 @@ const BlogCard: React.FC<BlogCardProps> = ({ blogs }) => {
           </div>
           <Link
             href={{
-              pathname: "/blog/addBlog",
+              pathname: "/dashboard/blog/addBlog",
               query: blog,
             }}
           >

@@ -3,10 +3,10 @@ import { parse } from "cookie";
 
 const protectedPages = [
   "/",
-  "/blog",
-  "/review",
-  "/portfolio",
-  "/blog/addBlog",
+  "/dashboard/blog",
+  "/dashboard/review",
+  "/dashboard/portfolio",
+  "/dashboard/blog/addBlog",
 ];
 
 export function protectedRoutesMiddleware(req: any) {

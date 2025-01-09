@@ -141,7 +141,7 @@ const BlogForm = () => {
                 <button
                   className="flex justify-center rounded-[7px] border border-stroke px-6 py-[7px] font-medium text-dark hover:shadow-1 dark:border-dark-3 dark:text-white"
                   type="button"
-                  onClick={() => push("/blog")}
+                  onClick={() => push("/dashboard/blog")}
                 >
                   Cancel
                 </button>

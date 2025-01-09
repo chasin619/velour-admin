@@ -62,7 +62,7 @@ const useBlogForm = () => {
 
       isEdit ? editBlog(finalPayload) : addBlog(finalPayload);
 
-      router.push("/blog");
+      router.push("/dashboard/blog");
       form.reset();
     } catch (error) {
       console.error("Error:", error);

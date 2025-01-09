@@ -7,7 +7,7 @@ const Home = () => {
   const { push } = useRouter();
 
   useEffect(() => {
-    push("/blog");
+    push("/dashboard/blog");
   }, []);
 };
 
