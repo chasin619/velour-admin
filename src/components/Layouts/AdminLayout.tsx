@@ -1,10 +1,11 @@
 "use client";
+
 import React, { useState } from "react";
 import Sidebar from "@/components/Sidebar";
 import Header from "@/components/Header";
-import { BlogSvg, PortfolioSvg, ReviewSvg } from "@/assets/svgs";
+import { UserSvg } from "@/assets/svgs";
 
-export default function DefaultLayout({
+export default function AdminLayout({
   children,
 }: {
   children: React.ReactNode;
@@ -15,19 +16,9 @@ export default function DefaultLayout({
       name: "MAIN MENU",
       menuItems: [
         {
-          label: "Blog",
-          route: "/dashboard/blog",
-          icon: BlogSvg,
-        },
-        {
-          icon: PortfolioSvg,
-          label: "Portfolio",
-          route: "/dashboard/portfolio",
-        },
-        {
-          icon: ReviewSvg,
-          label: "Review",
-          route: "/dashboard/review",
+          label: "Clients",
+          route: "/admin/client",
+          icon: UserSvg,
         },
       ],
     },
@@ -43,7 +34,6 @@ export default function DefaultLayout({
 
         <div className="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden">
           <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
-
           <main>
             <div className="mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-10">
               {children}

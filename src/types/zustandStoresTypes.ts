@@ -3,6 +3,11 @@ declare global {
     loading: boolean;
     setLoading: (loading: boolean) => void;
   };
+  type ClientStoreState = {
+    clients: any[];
+    addClient: (payload: any) => Promise<void>;
+    getClients: () => Promise<void>;
+  };
   type BlogStoreState = {
     blogs: any[];
     getAllBlogs: () => Promise<void>;

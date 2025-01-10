@@ -18,10 +18,14 @@ const useAuthStore = create(
         try {
           useConfigStore.getState().setLoading(true);
           const response = await axios.post("/api/auth/login", payload);
-          set({ accessToken: response.data.accessToken });
+          set({
+            accessToken: response.data.accessToken,
+            currentUser: response.data.user,
+          });
           document.cookie = `accessToken=${response.data.accessToken}; path=/; max-age=${30 * 24 * 60 * 60};`;
+          document.cookie = `role=${response.data.user.role}; path=/; max-age=${30 * 24 * 60 * 60};`;
           toast.success("Logged in successfully!");
-          set({ currentUser: response.data.user });
+          return response.data.user;
         } catch (error: any) {
           toast.error(error.response?.data?.error || "Login failed!");
         } finally {
@@ -32,6 +36,7 @@ const useAuthStore = create(
         const { reset } = get();
         reset();
         document.cookie = "accessToken=; path=/; max-age=0;";
+        document.cookie = "role=; path=/; max-age=0;";
         toast.success("Logout successfully!");
       },
       reset: () => set(initialValues),

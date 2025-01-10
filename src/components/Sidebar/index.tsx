@@ -6,38 +6,15 @@ import Link from "next/link";
 import SidebarItem from "@/components/Sidebar/SidebarItem";
 import ClickOutside from "@/components/ClickOutside";
 import useLocalStorage from "@/hooks/useLocalStorage";
-import { BlogSvg, PortfolioSvg, ReviewSvg } from "@/assets/svgs";
 import useAuthStore from "@/store/auth";
 
 interface SidebarProps {
   sidebarOpen: boolean;
   setSidebarOpen: (arg: boolean) => void;
+  menuItems: any[];
 }
 
-const menuGroups = [
-  {
-    name: "MAIN MENU",
-    menuItems: [
-      {
-        label: "Blog",
-        route: "/",
-        icon: BlogSvg,
-      },
-      {
-        icon: PortfolioSvg,
-        label: "Portfolio",
-        route: "/portfolio",
-      },
-      {
-        icon: ReviewSvg,
-        label: "Review",
-        route: "/review",
-      },
-    ],
-  },
-];
-
-const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
+const Sidebar = ({ sidebarOpen, setSidebarOpen, menuItems }: SidebarProps) => {
   const pathname = usePathname();
   const { currentUser } = useAuthStore();
 
@@ -84,14 +61,14 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
         <div className="no-scrollbar flex flex-col overflow-y-auto duration-300 ease-linear">
           {/* <!-- Sidebar Menu --> */}
           <nav className="mt-1 px-4 lg:px-6">
-            {menuGroups.map((group, groupIndex) => (
+            {menuItems.map((group, groupIndex) => (
               <div key={groupIndex}>
                 <h3 className="mb-5 text-sm font-medium text-dark-4 dark:text-dark-6">
                   {group.name}
                 </h3>
 
                 <ul className="mb-6 flex flex-col gap-2">
-                  {group.menuItems.map((menuItem, menuIndex) => (
+                  {group.menuItems.map((menuItem: any, menuIndex: any) => (
                     <SidebarItem
                       key={menuIndex}
                       item={menuItem}

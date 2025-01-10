@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { authMiddleware } from "./middlewares/auth";
 import { corsMiddleware } from "./middlewares/cors";
 import { protectedRoutesMiddleware } from "./middlewares/protectedRoutes";
+import { roleBasedAccessMiddleware } from "./middlewares/roleBasedAccess";
 
 export function middleware(req: any) {
   const authResponse = authMiddleware(req);
@@ -12,7 +13,7 @@ export function middleware(req: any) {
 
   const protectedResponse = protectedRoutesMiddleware(req);
   if (protectedResponse instanceof NextResponse) return protectedResponse;
-
+  
   return NextResponse.next();
 }
 
@@ -22,5 +23,6 @@ export const config = {
     "/",
     "/dashboard/:path*",
     "/auth/:path*",
+    "/admin/:path*",
   ],
 };

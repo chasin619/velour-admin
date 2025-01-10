@@ -19,8 +19,12 @@ const useLogin = () => {
 
   const onSubmit = async (payload: any) => {
     try {
-      await login(payload);
-      push("/dashboard/blog");
+      const user = await login(payload);
+      if (user.role === "admin") {
+        push("/admin/client");
+      } else {
+        push("/dashboard/blog");
+      }
       form.reset();
     } catch (error) {
       console.error("Error:", error);
