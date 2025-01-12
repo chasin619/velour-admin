@@ -3,7 +3,7 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
 import dbConnect from "@/libs/db";
-import User from "../../models/user";
+import User from "../models/user";
 
 interface ClientRequestBody {
   fullName: string;
@@ -18,6 +18,13 @@ export async function POST(req: Request) {
   try {
     const body: ClientRequestBody = await req.json();
     const { fullName, email, password, portalName } = body;
+
+    if (!fullName || !email || !password || !portalName) {
+      return NextResponse.json(
+        { error: "Fullname, Email, Password and PortalName are required" },
+        { status: 400 },
+      );
+    }
 
     await dbConnect();
     const existingClient: any = await User.findOne({ email });
@@ -50,6 +57,19 @@ export async function POST(req: Request) {
       { message: "Client added successfully", client, accessToken },
       { status: 200 },
     );
+  } catch (error: any) {
+    return NextResponse.json(
+      { error: "Internal Server Error", details: error.message },
+      { status: 500 },
+    );
+  }
+}
+
+export async function GET() {
+  try {
+    await dbConnect();
+    const users = await User.find({ role: "client" }).select("-password");
+    return NextResponse.json({ clients: users }, { status: 200 });
   } catch (error: any) {
     return NextResponse.json(
       { error: "Internal Server Error", details: error.message },
