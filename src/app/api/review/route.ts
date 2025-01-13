@@ -34,7 +34,7 @@ export async function POST(req: Request) {
 
 export async function GET(req: Request): Promise<NextResponse> {
   try {
-    const userId = req.headers.get("userId");
+    const userId = req.user;
     await dbConnect();
 
     const reviews: ReviewRequestBody[] = (

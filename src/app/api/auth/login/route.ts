@@ -43,7 +43,7 @@ export async function POST(req: Request) {
         id: existingUser._id,
       },
     };
-    const accessToken = jwt.sign(data, jwt_secret, { expiresIn: "1h" });
+    const accessToken = jwt.sign(data, jwt_secret);
 
     return NextResponse.json(
       { message: "Login successfully", accessToken, user: existingUser },
