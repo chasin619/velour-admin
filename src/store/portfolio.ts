@@ -1,7 +1,6 @@
 import { create } from "zustand";
-import axios from "axios";
 import toast from "react-hot-toast";
-import { getHeaders } from "@/utils/helpers";
+import api from "@/utils/api";
 
 interface PortfolioStore {
   portfolios: any[];
@@ -15,34 +14,28 @@ const usePortfolioStore = create<PortfolioStoreState>((set, get) => ({
   ...initialValues,
   getPortfolios: async () => {
     try {
-      const headers: any = getHeaders();
-      const response = await axios.get("/api/portfolio/get-portfolios", {
-        ...headers,
-      });
+      const response = await api.get("/portfolio");
       set({ portfolios: response.data.portfolios });
     } catch (error: any) {
-      console.log(error.message);
+      console.error("Error getting portfolios:", error.message);
+      toast.error("Failed to fetch portfolios");
     }
   },
   addPortfolio: async (payload) => {
     const { portfolios } = get();
     try {
-      const headers: any = getHeaders();
-      const response = await axios.post(
-        "/api/portfolio/add-portfolio",
-        payload,
-        { ...headers },
-      );
+      const response = await api.post("/portfolio", payload);
       set({ portfolios: [response.data.portfolio, ...portfolios] });
       toast.success(response.data.message);
     } catch (error: any) {
-      console.log(error.message);
+      console.error("Error adding portfolio:", error.message);
+      toast.error("Failed to add portfolio");
     }
   },
   deletePortfolio: async (id) => {
     const { portfolios } = get();
     try {
-      const response = await axios.delete("/api/portfolio/delete-portfolio", {
+      const response = await api.delete("/portfolio", {
         data: { id },
       });
       set({
@@ -50,8 +43,8 @@ const usePortfolioStore = create<PortfolioStoreState>((set, get) => ({
       });
       toast.success(response.data.message);
     } catch (error: any) {
-      console.error("Error deleting Portfolio:", error.message);
-      toast.error("Failed to delete the Portfolio");
+      console.error("Error deleting portfolio:", error.message);
+      toast.error("Failed to delete portfolio");
     }
   },
   reset: () => set({ portfolios: [] }),

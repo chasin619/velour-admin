@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
-import dbConnect from "@/libs/db";
+import dbConnect from "@/utils/db";
 import User from "../../models/user";
 
 interface LoginRequestBody {
@@ -43,7 +43,7 @@ export async function POST(req: Request) {
         id: existingUser._id,
       },
     };
-    const accessToken = jwt.sign(data, jwt_secret, { expiresIn: "1h" });
+    const accessToken = jwt.sign(data, jwt_secret);
 
     return NextResponse.json(
       { message: "Login successfully", accessToken, user: existingUser },
