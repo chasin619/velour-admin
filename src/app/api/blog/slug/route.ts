@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import Blog from "../../models/blog";
-import dbConnect from "@/libs/db";
+import dbConnect from "@/utils/db";
 
 interface BlogDocument {
   _id: string;
@@ -25,24 +25,21 @@ export async function GET(req: Request): Promise<NextResponse> {
     if (!slug) {
       return NextResponse.json(
         { error: "Blog slug is required" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
     const blog: BlogDocument | null = await Blog.findOne({ slug });
 
     if (!blog) {
-      return NextResponse.json(
-        { error: "Blog not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: "Blog not found" }, { status: 404 });
     }
 
     return NextResponse.json({ blog }, { status: 200 });
   } catch (error: any) {
     return NextResponse.json(
       { error: "Internal Server Error", details: error.message },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
