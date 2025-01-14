@@ -1,18 +1,23 @@
 import { NextResponse } from "next/server";
 
-export function corsMiddleware(req: any) {
-  const { pathname } = req.nextUrl;
+export function corsMiddleware(req: Request) {
+  const allowedOrigins = ["http://localhost:3001", "https://chicflowers.com"];
+  const origin = req.headers.get("origin");
 
-  if (pathname.startsWith("/api/")) {
+  if (origin && allowedOrigins.includes(origin)) {
     const res = NextResponse.next();
-    res.headers.set("Access-Control-Allow-Credentials", "true");
-    res.headers.set("Access-Control-Allow-Methods", "*");
     res.headers.set("Access-Control-Allow-Origin", "*");
     res.headers.set(
-      "Access-Control-Allow-Headers",
-      "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version, userId",
+      "Access-Control-Allow-Methods",
+      "GET, POST, PUT, DELETE, OPTIONS",
     );
-
+    res.headers.set(
+      "Access-Control-Allow-Headers",
+      "Content-Type, Authorization",
+    );
+    res.headers.set("Access-Control-Allow-Credentials", "true");
     return res;
   }
+
+  return NextResponse.next();
 }

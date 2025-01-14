@@ -15,15 +15,22 @@ export function jwtMiddleware(req: any) {
   const token = req.headers.get("Authorization")?.split(" ")[1];
 
   try {
-    const decoded = jwt.decode(token, jwt_secret);
+    const decoded: any = jwt.decode(token, jwt_secret);
     const requestHeaders = new Headers(req.headers);
-    requestHeaders.set("user", JSON.stringify(decoded.user));
+    requestHeaders.set("user", JSON.stringify(decoded?.user));
 
-    return NextResponse.next({
+    const response = NextResponse.next({
       request: {
         headers: requestHeaders,
       },
     });
+
+    response.headers.set("Access-Control-Allow-Origin", "*");
+    response.headers.set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+    response.headers.set("Access-Control-Allow-Headers", "Authorization, Content-Type");
+    response.headers.set("Access-Control-Allow-Credentials", "true");
+
+    return response;
   } catch (error) {
     console.error(error);
     return NextResponse.json({ message: "Invalid token" }, { status: 401 });
