@@ -4,6 +4,7 @@ import toast from "react-hot-toast";
 import { createJSONStorage, persist } from "zustand/middleware";
 import { zustandStorage } from "./storage/storage";
 import useConfigStore from "./config";
+import api from "@/utils/api";
 
 const initialValues: any = {
   accessToken: null,
@@ -17,7 +18,7 @@ const useAuthStore = create(
       login: async (payload) => {
         try {
           useConfigStore.getState().setLoading(true);
-          const response = await axios.post("/api/auth/login", payload);
+          const response = await api.post("/auth/login", payload);
           set({
             accessToken: response.data.accessToken,
             currentUser: response.data.user,

@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import dbConnect from "@/libs/db";
+import dbConnect from "@/utils/db";
 import slugify from "slugify";
 
 import Blog from "../models/blog";
@@ -18,7 +18,7 @@ export const dynamic = "force-dynamic";
 export async function POST(req: Request) {
   try {
     await dbConnect();
-    const userId = req.headers.get("userId");
+    const user = JSON.parse(req.headers.get("user") || "{}");
     const body: BlogRequestBody = await req.json();
     const { title, content, image, author, meta_description } = body;
 
@@ -35,7 +35,7 @@ export async function POST(req: Request) {
     const slug = slugify(title, { lower: true, strict: true });
 
     const blog = await Blog.create({
-      userId,
+      userId: user.id,
       title,
       content,
       image,
@@ -56,14 +56,16 @@ export async function POST(req: Request) {
   }
 }
 
-export async function GET(req: Request): Promise<NextResponse> {
+export async function GET(req: Request | any): Promise<NextResponse> {
   try {
-    const userId = req.headers.get("userId");
+    const user = JSON.parse(req.headers.get("user") || "{}");
     await dbConnect();
 
-    const blogs: BlogRequestBody[] = await Blog.find({ userId: userId }).sort({
-      createdAt: -1,
-    });
+    const blogs: BlogRequestBody[] = await Blog.find({ userId: user?.id }).sort(
+      {
+        createdAt: -1,
+      },
+    );
 
     return NextResponse.json({ blogs }, { status: 200 });
   } catch (error: any) {

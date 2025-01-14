@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
-import dbConnect from "@/libs/db";
+import dbConnect from "@/utils/db";
 import User from "../../models/user";
 
 interface UserRequestBody {

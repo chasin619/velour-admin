@@ -4,25 +4,28 @@ import jwt from "jsonwebtoken";
 const jwt_secret: any = process.env.JWT_SECRET || "";
 
 export function jwtMiddleware(req: any) {
-  if (req.nextUrl.pathname.startsWith("/api/auth/")) {
+  const { pathname } = req.nextUrl;
+
+  const apis = ["api/blog", "api/client", "api/review", "api/portfolio"];
+
+  if (pathname.startsWith("/api/auth/") || !apis.some((api) => pathname.startsWith(`/${api}`))) {
     return NextResponse.next();
   }
 
   const token = req.headers.get("Authorization")?.split(" ")[1];
 
-  if (!token) {
-    return NextResponse.json(
-      { message: "Access Denied. Please provide the access token" },
-      { status: 401 },
-    );
-  }
-
   try {
-    const decoded: any = jwt.decode(token, jwt_secret);
-    console.log(decoded);
-    req.user = decoded;
-    return NextResponse.next();
+    const decoded = jwt.decode(token, jwt_secret);
+    const requestHeaders = new Headers(req.headers);
+    requestHeaders.set("user", JSON.stringify(decoded.user));
+
+    return NextResponse.next({
+      request: {
+        headers: requestHeaders,
+      },
+    });
   } catch (error) {
+    console.error(error);
     return NextResponse.json({ message: "Invalid token" }, { status: 401 });
   }
 }

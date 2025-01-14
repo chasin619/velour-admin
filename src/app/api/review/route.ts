@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import dbConnect from "@/libs/db";
+import dbConnect from "@/utils/db";
 
 import Review from "../models/review";
 
@@ -12,13 +12,13 @@ export const dynamic = "force-dynamic";
 
 export async function POST(req: Request) {
   try {
-    const userId = req.headers.get("userId");
+    const user = JSON.parse(req.headers.get("user") || "{}");
     const body: ReviewRequestBody = await req.json();
     const { image } = body;
 
     await dbConnect();
 
-    const review = await Review.create({ image, userId });
+    const review = await Review.create({ image, userId: user.id });
 
     return NextResponse.json(
       { message: "Review added successfully", review },
@@ -34,11 +34,11 @@ export async function POST(req: Request) {
 
 export async function GET(req: Request): Promise<NextResponse> {
   try {
-    const userId = req.user;
+    const user = JSON.parse(req.headers.get("user") || "{}");
     await dbConnect();
 
     const reviews: ReviewRequestBody[] = (
-      await Review.find({ userId: userId })
+      await Review.find({ userId: user.id })
     ).reverse();
 
     return NextResponse.json({ reviews }, { status: 200 });

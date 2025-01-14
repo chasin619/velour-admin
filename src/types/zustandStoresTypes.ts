@@ -7,6 +7,8 @@ declare global {
     clients: any[];
     addClient: (payload: any) => Promise<void>;
     getClients: () => Promise<void>;
+    deleteClient: (id: string) => Promise<void>;
+    editClient: (payload: any) => Promise<void>;
   };
   type BlogStoreState = {
     blogs: any[];

@@ -5,12 +5,11 @@ import { protectedRoutesMiddleware } from "./middlewares/protectedRoutes";
 import { jwtMiddleware } from "./middlewares/jwtMiddleware";
 
 export function middleware(req: any) {
-  
-  const authResponse = authMiddleware(req);
-  if (authResponse instanceof NextResponse) return authResponse;
-  
   const jwtResponse = jwtMiddleware(req);
   if (jwtResponse instanceof NextResponse) return jwtResponse;
+
+  const authResponse = authMiddleware(req);
+  if (authResponse instanceof NextResponse) return authResponse;
 
   const corsResponse = corsMiddleware(req);
   if (corsResponse instanceof NextResponse) return corsResponse;

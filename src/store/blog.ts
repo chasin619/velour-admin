@@ -2,6 +2,7 @@ import { create } from "zustand";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { getHeaders } from "@/utils/helpers";
+import api from "@/utils/api";
 
 interface BlogStore {
   blogs: any[];
@@ -15,8 +16,7 @@ const useBlogStore = create<BlogStoreState>((set, get) => ({
   ...initialValues,
   getAllBlogs: async () => {
     try {
-      const headers: any = getHeaders();
-      const response = await axios.get("/api/blog/get-blogs", { ...headers });
+      const response = await api.get("/blog");
       set({ blogs: response.data.blogs });
     } catch (error: any) {
       console.log(error.message);
@@ -25,10 +25,7 @@ const useBlogStore = create<BlogStoreState>((set, get) => ({
   addBlog: async (payload) => {
     const { blogs } = get();
     try {
-      const headers: any = getHeaders();
-      const response = await axios.post("/api/blog/add-blog", payload, {
-        ...headers,
-      });
+      const response = await api.post("/blog", payload);
       set({ blogs: [response.data.blog, ...blogs] });
       toast.success(response.data.message);
     } catch (error: any) {
@@ -38,7 +35,7 @@ const useBlogStore = create<BlogStoreState>((set, get) => ({
   deleteBlog: async (id) => {
     const { blogs } = get();
     try {
-      const response = await axios.delete("/api/blog/delete-blog", {
+      const response = await api.delete("/blog", {
         data: { id },
       });
       set({ blogs: blogs.filter((blog) => blog._id !== id) });
@@ -51,7 +48,7 @@ const useBlogStore = create<BlogStoreState>((set, get) => ({
   editBlog: async (payload) => {
     const { blogs } = get();
     try {
-      const response = await axios.put("/api/blog/edit-blog", payload);
+      const response = await api.put("/blog", payload);
       set({
         blogs: blogs.map((blog) =>
           blog.id === payload.id

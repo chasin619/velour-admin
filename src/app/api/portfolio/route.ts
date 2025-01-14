@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import dbConnect from "@/libs/db";
+import dbConnect from "@/utils/db";
 
 import Portfolio from "../models/portfolio";
 
@@ -13,7 +13,7 @@ export const dynamic = "force-dynamic";
 
 export async function POST(req: Request) {
   try {
-    const userId = req.headers.get("userId");
+    const user = JSON.parse(req.headers.get("user") || "{}");
     const body: PortfolioRequestBody = await req.json();
     const { title, images } = body;
 
@@ -26,7 +26,7 @@ export async function POST(req: Request) {
 
     await dbConnect();
 
-    const portfolio = await Portfolio.create({ title, images, userId });
+    const portfolio = await Portfolio.create({ title, images, userId: user.id });
 
     return NextResponse.json(
       { message: "Portfolio added successfully", portfolio },
@@ -42,11 +42,11 @@ export async function POST(req: Request) {
 
 export async function GET(req: Request): Promise<NextResponse> {
   try {
-    const userId = req.headers.get("userId");
+    const user = JSON.parse(req.headers.get("user") || "{}");
     await dbConnect();
 
     const portfolios: PortfolioRequestBody[] = (
-      await Portfolio.find({ userId: userId })
+      await Portfolio.find({ userId: user.id })
     ).reverse();
 
     return NextResponse.json({ portfolios }, { status: 200 });
